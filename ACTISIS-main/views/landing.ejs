@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/landing.css">
+</head>
+<body>
+    <header class="bg-danger text-white">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="/images/Logo-nuevo-horizontal.png" alt="Logo UFPS" height="40" class="d-inline-block align-text-top me-2">
+                    ACTISIS
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#actividades">Actividades</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#acerca">Acerca de</a>
+                        </li>
+                        <% if (user) { %>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-outline-light ms-2" href="/dashboard">Dashboard</a>
+                            </li>
+                        <% } else { %>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-outline-light ms-2" href="/login">Iniciar Sesión</a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h1 class="display-4 fw-bold">Sistema de Gestión de Actividades</h1>
+                        <p class="lead">Programa de Ingeniería de Sistemas - Universidad Francisco de Paula Santander</p>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                            <a href="/login" class="btn btn-light btn-lg px-4 me-md-2">Iniciar Sesión</a>
+                            <a href="#actividades" class="btn btn-outline-light btn-lg px-4">Ver Actividades</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <img src="/images/presentacionPrograma.jpg" alt="Programa de Ingeniería de Sistemas" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="actividades" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Actividades en Curso</h2>
+            <div class="row" id="actividades-en-curso">
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-center mb-5 mt-5">Próximas Actividades</h2>
+            <div class="row" id="actividades-proximas">
+                <div class="col-12 text-center">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="acerca" class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>Acerca de ACTISIS</h2>
+                    <p class="lead">Sistema de Gestión de Actividades del Programa de Ingeniería de Sistemas</p>
+                    <p>ACTISIS es una plataforma diseñada para facilitar el registro, seguimiento y consulta de las actividades académicas, de investigación y extensión del programa de Ingeniería de Sistemas de la Universidad Francisco de Paula Santander.</p>
+                    <p>A través de esta herramienta, docentes y administrativos pueden gestionar eficientemente las actividades del programa, generando reportes y manteniendo un registro histórico de todas las actividades realizadas.</p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title">Características principales</h3>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Registro de actividades académicas, de investigación y extensión</li>
+                                <li class="list-group-item">Seguimiento de actividades en curso</li>
+                                <li class="list-group-item">Generación de reportes personalizados</li>
+                                <li class="list-group-item">Gestión de usuarios y permisos</li>
+                                <li class="list-group-item">Interfaz intuitiva y fácil de usar</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Universidad Francisco de Paula Santander</h5>
+                    <p>Programa de Ingeniería de Sistemas</p>
+                    <p>Avenida Gran Colombia No. 12E-96 Barrio Colsag<br>San José de Cúcuta - Colombia</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5>Contacto</h5>
+                    <p>Teléfono: (607) 577 6655</p>
+                    <p>Email: ingsistemas@ufps.edu.co</p>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="mb-0">&copy; <%= new Date().getFullYear() %> ACTISIS - Todos los derechos reservados</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Función para formatear fechas
+        function formatearFecha(fechaStr) {
+            const fecha = new Date(fechaStr);
+            return fecha.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        // Cargar actividades en curso
+        fetch('/api/actividades/encurso')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Error en la respuesta del servidor: ' + res.status);
+                }
+                return res.json();
+            })
+            .then(actividades => {
+                const contenedor = document.getElementById('actividades-en-curso');
+                contenedor.innerHTML = '';
+
+                if (actividades.length === 0) {
+                    contenedor.innerHTML = '<div class="col-12 text-center"><p>No hay actividades en curso actualmente.</p></div>';
+                    return;
+                }
+
+                actividades.forEach(actividad => {
+                    const fechaInicio = formatearFecha(actividad.fechaInicio);
+                    const fechaFin = formatearFecha(actividad.fechaFin);
+
+                    const card = document.createElement('div');
+                    card.className = 'col-md-4 mb-4';
+                    card.innerHTML = `
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-danger text-white">
+                                <h5 class="card-title mb-0">${actividad.nombre}</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"><strong>Tipo:</strong> ${actividad.tipo}</p>
+                                <p class="card-text"><strong>Fechas:</strong> ${fechaInicio} - ${fechaFin}</p>
+                                <p class="card-text"><strong>Lugar:</strong> ${actividad.lugar}</p>
+                                <p class="card-text"><strong>Responsable:</strong> ${actividad.responsable}</p>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <a href="/login" class="btn btn-outline-danger btn-sm">Iniciar sesión para ver detalles</a>
+                            </div>
+                        </div>
+                    `;
+                    contenedor.appendChild(card);
+                });
+            })
+            .catch(err => {
+                console.error('Error al cargar actividades en curso:', err);
+                document.getElementById('actividades-en-curso').innerHTML = 
+                    '<div class="col-12 text-center"><p class="text-danger">Error al cargar actividades. Detalles: ' + err.message + '</p></div>';
+            });
+
+        // Cargar próximas actividades
+        fetch('/api/actividades/proximas')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Error en la respuesta del servidor: ' + res.status);
+                }
+                return res.json();
+            })
+            .then(actividades => {
+                const contenedor = document.getElementById('actividades-proximas');
+                contenedor.innerHTML = '';
+
+                if (actividades.length === 0) {
+                    contenedor.innerHTML = '<div class="col-12 text-center"><p>No hay próximas actividades programadas.</p></div>';
+                    return;
+                }
+
+                actividades.forEach(actividad => {
+                    const fechaInicio = formatearFecha(actividad.fechaInicio);
+                    const fechaFin = formatearFecha(actividad.fechaFin);
+
+                    const card = document.createElement('div');
+                    card.className = 'col-md-4 mb-4';
+                    card.innerHTML = `
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">${actividad.nombre}</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"><strong>Tipo:</strong> ${actividad.tipo}</p>
+                                <p class="card-text"><strong>Fechas:</strong> ${fechaInicio} - ${fechaFin}</p>
+                                <p class="card-text"><strong>Lugar:</strong> ${actividad.lugar}</p>
+                                <p class="card-text"><strong>Responsable:</strong> ${actividad.responsable}</p>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <a href="/login" class="btn btn-outline-primary btn-sm">Iniciar sesión para ver detalles</a>
+                            </div>
+                        </div>
+                    `;
+                    contenedor.appendChild(card);
+                });
+            })
+            .catch(err => {
+                console.error('Error al cargar próximas actividades:', err);
+                document.getElementById('actividades-proximas').innerHTML = 
+                    '<div class="col-12 text-center"><p class="text-danger">Error al cargar actividades. Detalles: ' + err.message + '</p></div>';
+            });
+    </script>
+</body>
+</html>

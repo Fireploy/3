@@ -1,0 +1,391 @@
+<%- include('partials/header', { title: 'Gestionar Usuarios - ACTISIS' }) %>
+
+<%- include('partials/navbar', { user: data, page: 'gestionar_usuarios' }) %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Gestión de Usuarios</h1>
+                <button id="btn-nuevo-usuario" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalUsuario">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill me-1" viewBox="0 0 16 16">
+                        <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                        <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
+                    </svg>
+                    Nuevo Usuario
+                </button>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Lista de Usuarios</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Rol</th>
+                                    <th scope="col">Fecha de Registro</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-list">
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        <div class="spinner-border text-danger" role="status">
+                                            <span class="visually-hidden">Cargando...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para crear/editar usuario -->
+<div class="modal fade" id="modalUsuario" tabindex="-1" aria-labelledby="modalUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalUsuarioLabel">Nuevo Usuario</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-usuario">
+                    <input type="hidden" id="usuario-id">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                        <div class="form-text" id="password-help">Dejar en blanco para mantener la contraseña actual (en caso de edición).</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Rol</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="user">Usuario</option>
+                            <option value="admin">Administrador</option>
+                            <option value="docente">Docente</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btn-guardar-usuario">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalConfirmacionLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar este usuario? Esta acción no se puede deshacer.</p>
+                <input type="hidden" id="usuario-eliminar-id">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btn-confirmar-eliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Variables globales
+    let usuarios = [];
+    let modoEdicion = false;
+    let modalUsuario;
+    let modalConfirmacion;
+    
+    // Función para cargar usuarios
+    function cargarUsuarios() {
+        console.log('Iniciando cargarUsuarios...'); // Log inicial
+        const tablaBody = document.getElementById('users-list');
+        
+        // Mostrar spinner (asegurarse de que esté visible al inicio)
+        tablaBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        fetch('/api/users')
+            .then(res => {
+                console.log('Respuesta recibida del fetch:', res); // Log de la respuesta completa
+                if (!res.ok) {
+                    console.error('Error en la respuesta del servidor (res.ok false):', res.status, res.statusText);
+                    // Intentar leer el cuerpo del error si es posible
+                    return res.json().then(errBody => {
+                        console.error('Cuerpo del error:', errBody);
+                        throw new Error(errBody.message || `Error ${res.status}: ${res.statusText}`);
+                    }).catch(() => {
+                        // Si el cuerpo no es JSON o hay otro error al leerlo
+                        throw new Error(`Error ${res.status}: ${res.statusText}`);
+                    });
+                }
+                return res.json();
+            })
+            .then(data => {
+                console.log('Datos recibidos (usuarios):', data); // Log de los datos
+                usuarios = data;
+                tablaBody.innerHTML = '';
+                
+                if (usuarios.length === 0) {
+                    tablaBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="text-center">No hay usuarios registrados.</td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                usuarios.forEach(usuario => {
+                    const fechaRegistro = new Date(usuario.createdAt).toLocaleDateString('es-ES');
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${usuario.email}</td>
+                        <td>${usuario.name || '-'}</td>
+                        <td>
+                            ${(() => {
+                                let rolLabel;
+                                if (usuario.role === 'admin') {
+                                    rolLabel = `<span class="badge bg-danger">Administrador</span>`;
+                                } else if (usuario.role === 'docente') {
+                                    rolLabel = `<span class="badge bg-success">Docente</span>`;
+                                } else {
+                                    rolLabel = `<span class="badge bg-secondary">Usuario</span>`;
+                                }
+                                return rolLabel;
+                            })()}
+                        </td>
+                        <td>${fechaRegistro}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary editar-usuario" data-id="${usuario._id}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.5-.5V9h-.5a.5.5 0 0 1-.5-.5V8h-.5a.5.5 0 0 1-.5-.5V7h-.5a.5.5 0 0 1-.5-.5V6h-.5a.5.5 0 0 1-.5-.5V5h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                </svg>
+                            </button>
+                            <button class="btn btn-sm btn-danger eliminar-usuario" data-id="${usuario._id}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                </svg>
+                            </button>
+                        </td>
+                    `;
+                    tablaBody.appendChild(tr);
+                });
+                
+                // Agregar event listeners a los botones
+                document.querySelectorAll('.editar-usuario').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        editarUsuario(id);
+                    });
+                });
+                
+                document.querySelectorAll('.eliminar-usuario').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        confirmarEliminar(id);
+                    });
+                });
+            })
+            .catch(err => {
+                console.error('Error en cargarUsuarios fetch:', err); // Log del error
+                tablaBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center text-danger">
+                            Error al cargar usuarios: ${err.message}. Por favor, intente de nuevo más tarde o contacte al administrador.
+                        </td>
+                    </tr>
+                `;
+                // Opcionalmente, mostrar una alerta más visible
+                // alert('Error al cargar usuarios: ' + err.message);
+            });
+    }
+    
+    // Función para abrir modal en modo creación
+    function nuevoUsuario() {
+        modoEdicion = false; // Aseguramos que estamos en modo creación
+        document.getElementById('modalUsuarioLabel').textContent = 'Nuevo Usuario';
+        document.getElementById('form-usuario').reset();
+        document.getElementById('usuario-id').value = '';
+        document.getElementById('password').required = true;
+        document.getElementById('password-help').style.display = 'none';
+        modalUsuario.show();
+        console.log('Modo edición:', modoEdicion); // Para depuración
+    }
+    
+    // Función para abrir modal en modo edición
+    function editarUsuario(id) {
+        modoEdicion = true; // Establecemos modo edición
+        const usuario = usuarios.find(u => u._id === id);
+        
+        if (!usuario) {
+            alert('Usuario no encontrado');
+            return;
+        }
+        
+        document.getElementById('modalUsuarioLabel').textContent = 'Editar Usuario';
+        document.getElementById('usuario-id').value = usuario._id;
+        document.getElementById('email').value = usuario.email;
+        document.getElementById('name').value = usuario.name || '';
+        document.getElementById('role').value = usuario.role;
+        document.getElementById('password').required = false;
+        document.getElementById('password').value = '';
+        document.getElementById('password-help').style.display = 'block';
+        
+        modalUsuario.show();
+        console.log('Modo edición:', modoEdicion, 'ID:', id); // Para depuración
+    }
+    
+    // Función para guardar usuario (crear o actualizar)
+    function guardarUsuario() {
+        const form = document.getElementById('form-usuario');
+        
+        // Validar el formulario
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        
+        // Obtener ID y determinar si estamos en modo edición
+        const id = document.getElementById('usuario-id').value;
+        const isEditing = id !== '' && modoEdicion;
+        
+        console.log('Guardando usuario - Modo edición:', isEditing, 'ID:', id);
+        
+        // Preparar datos del usuario
+        const userData = {
+            email: document.getElementById('email').value,
+            name: document.getElementById('name').value,
+            role: document.getElementById('role').value
+        };
+        
+        // Solo incluir password si se ha ingresado uno
+        const password = document.getElementById('password').value;
+        if (password) {
+            userData.password = password;
+        }
+        
+        // Determinar URL y método
+        const url = isEditing ? `/api/users/${id}` : '/api/users';
+        const method = isEditing ? 'PUT' : 'POST';
+        
+        console.log('Enviando petición:', method, url);
+        
+        // Realizar petición al servidor
+        fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData),
+            credentials: 'same-origin' // Asegura que se envíen las cookies
+        })
+        .then(res => {
+            console.log('Respuesta del servidor:', res.status);
+            
+            if (!res.ok) {
+                return res.json().then(err => {
+                    throw new Error(err.message || 'Error al guardar usuario');
+                });
+            }
+            return res.json();
+        })
+        .then(data => {
+            console.log('Datos recibidos:', data);
+            modalUsuario.hide();
+            cargarUsuarios();
+            
+            // Mostrar mensaje de éxito
+            alert(isEditing ? 'Usuario actualizado correctamente' : 'Usuario creado correctamente');
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            alert('Error: ' + err.message);
+        });
+    }
+    
+    // Función para confirmar eliminación
+    function confirmarEliminar(id) {
+        document.getElementById('usuario-eliminar-id').value = id;
+        modalConfirmacion.show();
+    }
+    
+    // Función para eliminar usuario
+    function eliminarUsuario() {
+        const id = document.getElementById('usuario-eliminar-id').value;
+        
+        fetch(`/api/users/${id}`, {
+            method: 'DELETE'
+        })
+        .then(res => {
+            if (!res.ok) {
+                return res.json().then(err => {
+                    throw new Error(err.message || 'Error al eliminar usuario');
+                });
+            }
+            return res.json();
+        })
+        .then(data => {
+            modalConfirmacion.hide();
+            cargarUsuarios();
+            
+            // Mostrar mensaje de éxito
+            alert('Usuario eliminado correctamente');
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            alert('Error: ' + err.message);
+            modalConfirmacion.hide();
+        });
+    }
+    
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar los modales Bootstrap (después de que el script de Bootstrap ha cargado)
+        modalUsuario = new bootstrap.Modal(document.getElementById('modalUsuario'));
+        modalConfirmacion = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
+        
+        // Cargar usuarios al iniciar
+        cargarUsuarios();
+        
+        // Botón para nuevo usuario
+        document.getElementById('btn-nuevo-usuario').addEventListener('click', nuevoUsuario);
+        
+        // Botón para guardar usuario
+        document.getElementById('btn-guardar-usuario').addEventListener('click', guardarUsuario);
+        
+        // Botón para confirmar eliminación
+        document.getElementById('btn-confirmar-eliminar').addEventListener('click', eliminarUsuario);
+    });
+</script>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,217 @@
+<%- include('partials/header', { title: 'Registro de Actividad - ACTISIS' }) %>
+
+<%- include('partials/navbar', { user: typeof data !=='undefined' ? data : null, page: 'registro_actividad' }) %>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Registro de Actividades - Ing. de Sistemas</h4>
+                </div>
+                <div class="card-body">
+                    <div id="activity-message" class="mb-3"></div>
+
+                    <form id="register-activity-form" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="actividad-nombre" class="form-label">Nombre de la Actividad</label>
+                            <input type="text" class="form-control" id="actividad-nombre" name="nombre"
+                                required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="actividad-fecha-inicio" class="form-label">Fecha Inicio</label>
+                                <input type="date" class="form-control" id="actividad-fecha-inicio"
+                                    name="fechaInicio" required>
+                            </div>
+                            <div class="col-6">
+                                <label for="actividad-fecha-fin" class="form-label">Fecha Fin</label>
+                                <input type="date" class="form-control" id="actividad-fecha-fin" name="fechaFin"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="actividad-lugar" class="form-label">Lugar de la Actividad</label>
+                            <input type="text" class="form-control" id="actividad-lugar" name="lugar"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="actividad-tipo" class="form-label">Tipo de Actividad</label>
+                            <select class="form-select" id="actividad-tipo" name="tipo" required>
+                                <option selected disabled value="">Selecciona un tipo...</option>
+                                <option value="Docencia">Docencia</option>
+                                <option value="Investigación">Investigación</option>
+                                <option value="Extensión">Extensión</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="actividad-movilidad" class="form-label">Movilidad</label>
+                            <select class="form-select" id="actividad-movilidad" name="movilidad">
+                                <option value="No aplica" selected>No Aplica</option>
+                                <option value="Entrante">Entrante</option>
+                                <option value="Saliente">Saliente</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="actividad-semestre" class="form-label">Semestre</label>
+                            <select class="form-select" id="actividad-semestre" name="semestre" required>
+                                <option selected disabled value="">Selecciona un semestre...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="actividad-tematica" class="form-label">Temática</label>
+                            <input type="text" class="form-control" id="actividad-tematica" name="tematica">
+                        </div>
+                        <div class="mb-3">
+                            <label for="actividad-descripcion" class="form-label">Descripción</label>
+                            <textarea class="form-control" rows="3" id="actividad-descripcion"
+                                name="descripcion"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="actividad-responsable" class="form-label">Responsable
+                                (Docente/Admin)</label>
+                            <select class="form-select" id="actividad-responsable" name="responsable" required>
+                                <option selected disabled value="">Seleccionar responsable...</option>
+                                <!-- Se cargarán dinámicamente los usuarios admin y docentes -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="actividad-evidencia" class="form-label">Adjuntar Evidencia
+                                (Opcional)</label>
+                            <input class="form-control" type="file" id="actividad-evidencia" name="evidencia">
+                        </div>
+
+                        <button type="submit" class="btn btn-danger">Registrar Actividad</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const activityForm = document.getElementById('register-activity-form');
+    const activityMessage = document.getElementById('activity-message');
+    const responsableSelect = document.getElementById('actividad-responsable');
+    
+    // Función para cargar los usuarios (admin y docentes) en el select de responsables
+    function cargarResponsables() {
+        fetch('/api/users/available')
+            .then(res => {
+                if (res.status === 401) {
+                    // Attempt to parse the JSON error message from the server
+                    return res.json().then(errorData => {
+                        throw new Error(errorData.message || 'Error de autenticación. Por favor, inicie sesión.');
+                    }).catch(() => {
+                        // Fallback if parsing JSON fails for some reason
+                        throw new Error('Error de autenticación (401). Por favor, inicie sesión.');
+                    });
+                }
+                if (!res.ok) {
+                    // For other non-OK responses, try to get a message or use status text
+                    return res.text().then(text => { // Use text() first to avoid JSON parse error if not JSON
+                        let errorMsg = `Error en la respuesta del servidor: ${res.status}`;
+                        try {
+                            const jsonData = JSON.parse(text);
+                            if (jsonData && jsonData.message) {
+                                errorMsg = jsonData.message;
+                            }
+                        } catch (e) {
+                            // If not JSON, use the text itself if it's short, or a generic message
+                            if (text && text.length < 100) {
+                                errorMsg = text;
+                            }
+                        }
+                        throw new Error(errorMsg);
+                    });
+                }
+                return res.json();
+            })
+            .then(usuarios => {
+                // Mantener la opción por defecto
+                responsableSelect.innerHTML = '<option selected disabled value="">Seleccionar responsable...</option>';
+                
+                // Agregar cada usuario como una opción
+                if (usuarios && usuarios.length > 0) {
+                    usuarios.forEach(usuario => {
+                        const option = document.createElement('option');
+                        option.value = usuario.name; // Usar el nombre como valor
+                        option.textContent = `${usuario.name} (${usuario.role === 'admin' ? 'Administrador' : 'Docente'})`;
+                        responsableSelect.appendChild(option);
+                    });
+                } else {
+                     responsableSelect.innerHTML += '<option disabled>No hay responsables disponibles</option>';
+                }
+            })
+            .catch(err => {
+                console.error('Error al cargar responsables:', err.message);
+                // Limpiar y mostrar el mensaje de error específico en el select
+                responsableSelect.innerHTML = '<option selected disabled value="">Seleccionar responsable...</option>';
+                const errorOption = document.createElement('option');
+                errorOption.disabled = true;
+                errorOption.textContent = err.message; // Display the specific error message
+                responsableSelect.appendChild(errorOption);
+            });
+    }
+    
+    // Cargar responsables cuando se carga la página
+    document.addEventListener('DOMContentLoaded', cargarResponsables);
+
+    activityForm?.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevenir el envío HTML tradicional
+        activityMessage.innerHTML = ''; // Limpiar mensajes
+
+        // Crear un objeto FormData para enviar datos del formulario incluyendo archivos
+        const formData = new FormData(activityForm);
+        
+        // Validaciones manuales para campos requeridos
+        const nombre = document.getElementById('actividad-nombre').value;
+        const fechaInicio = document.getElementById('actividad-fecha-inicio').value;
+        const fechaFin = document.getElementById('actividad-fecha-fin').value;
+        const tipo = document.getElementById('actividad-tipo').value;
+        const semestre = document.getElementById('actividad-semestre').value;
+        const responsable = document.getElementById('actividad-responsable').value;
+
+        // Validar que los campos requeridos no estén vacíos
+        if (!nombre || !fechaInicio || !fechaFin || !tipo || !semestre || !responsable) {
+            activityMessage.innerHTML = '<div class="alert alert-warning">Por favor, completa todos los campos requeridos.</div>';
+            return;
+        }
+
+        // Validar que la fecha de fin no sea anterior a la fecha de inicio
+        if (new Date(fechaFin) < new Date(fechaInicio)) {
+            activityMessage.innerHTML = '<div class="alert alert-warning">La fecha de fin no puede ser anterior a la fecha de inicio.</div>';
+            return;
+        }
+        
+        // Mostrar mensaje de carga
+        activityMessage.innerHTML = '<div class="alert alert-info">Registrando actividad, por favor espere...</div>';
+
+        fetch('/api/actividades', {
+            method: 'POST',
+            // No establecer Content-Type para que el navegador lo configure automáticamente con el boundary correcto
+            body: formData
+        })
+            .then(res => res.json().then(data => ({ ok: res.ok, status: res.status, data })))
+            .then(({ ok, data }) => {
+                if (ok) {
+                    activityMessage.innerHTML = '<div class="alert alert-success">Actividad registrada exitosamente.</div>';
+                    activityForm.reset();
+                    
+                    // Redirigir al dashboard después de 2 segundos
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 2000);
+                } else {
+                    activityMessage.innerHTML = `<div class="alert alert-danger">${data.message || 'Error al registrar la actividad.'}</div>`;
+                }
+            })
+            .catch(err => {
+                console.error('Fetch Error:', err);
+                activityMessage.innerHTML = '<div class="alert alert-danger">Error de conexión al registrar la actividad.</div>';
+            });
+    });
+</script>
+
+<%- include('partials/footer') %>

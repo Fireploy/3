@@ -1,0 +1,313 @@
+<%- include('partials/header', { title: 'Detalle de Actividad - ACTISIS' }) %>
+
+<%- include('partials/navbar', { user: data, page: 'consultar_actividades' }) %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/consultar_actividades">Consultar Actividades</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Detalle de Actividad</li>
+                </ol>
+            </nav>
+            
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Detalle de Actividad</h4>
+                    <button id="descargar-pdf" class="btn btn-sm btn-outline-light">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-pdf me-1" viewBox="0 0 16 16">
+                            <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
+                            <path d="M4.603 12.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.187-.012.395-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.065.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.6 11.6 0 0 0-1.997.406 11.3 11.3 0 0 1-1.021 1.51c-.29.35-.608.655-.926.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.093.031c.075-.001.203-.05.379-.217.589-.484.777-.927.779-.934.2.161.38.347.579.543.099.096.188.184.277.276.027.028.085.133.067.21-.011.048-.07.106-.183.157-.129.059-.448.175-.76.292l-.012.84q-.91.603-.903 1.853v.007q-.528.285-1.028.528l-.036.018q-.515.27-.997.675l-.048.04c-.12.098-.248.202-.335.34-.036.058-.075.138-.064.217.011.088.073.165.179.205.106.04.195.011.254-.071.023-.03.049-.075.066-.127a.4.4 0 0 0 .022-.13c.001-.042-.012-.178-.093-.283-.028-.037-.056-.108-.03-.148.024-.036.135-.065.19-.084l.05-.016q.36-.12.735-.245c.275-.091.542-.18.793-.267v.007a1.2 1.2 0 0 0 .076-.024q.43-.159.86-.403l.025-.013q.242-.135.5-.3l.056-.035q.368-.23.747-.515l.032-.025q.322-.248.62-.54l.045-.044q.334-.338.6-.724l.014-.022c.197-.32.33-.697.33-.697s.229.297.366.52l.036.06q.154.255.29.544l.017.036q.125.272.235.556l.033.087.035.092q.082.223.154.458l.025.085q.119.402.19.838l.014.083q.064.425.07.898v.042q.003.23-.012.457l-.01.105c-.01.149-.035.297-.053.445l-.01.075c-.023.163-.053.316-.084.469l-.016.09c-.033.159-.07.318-.112.475l-.031.121c-.023.09-.047.178-.073.266l-.031.097q-.099.339-.225.67l-.03.078q-.126.32-.281.635l-.038.078q-.155.31-.346.608l-.041.066q-.198.305-.433.6l-.045.058q-.235.293-.501.57l-.048.051q-.267.275-.564.532l-.05.044q-.295.254-.61.486l-.049.036q-.322.232-.664.435l-.045.027q-.336.197-.69.365l-.044.022q-.354.17-.723.3l-.036.013q-.361.125-.733.204l-.032.007q-.372.079-.748.107l-.034.003q-.367.027-.733.003l-.036-.002q-.366-.024-.728-.098l-.031-.007q-.361-.074-.714-.193l-.029-.01q-.356-.123-.697-.29l-.03-.014q-.346-.171-.676-.384l-.024-.016q-.324-.214-.628-.465l-.024-.021q-.304-.252-.585-.537l-.017-.018q-.282-.285-.54-.595l-.018-.022q-.255-.31-.486-.645l-.014-.021q-.234-.339-.44-.695l-.01-.019q-.205-.356-.38-.728l-.008-.018q-.177-.375-.323-.76l-.007-.022c-.088-.232-.168-.465-.235-.698l-.007-.027q-.099-.343-.167-.691l-.006-.028q-.069-.35-.107-.702l-.003-.025q-.038-.352-.044-.704v-.022q-.007-.353.017-.704l.003-.026q.023-.35.078-.698l.005-.028q.055-.347.14-.69l.006-.024q.085-.343.2-.68l.01-.03q.114-.336.258-.665l.01-.022q.144-.33.317-.651l.014-.026q.172-.32.372-.626l.013-.02q.2-.307.428-.596l.015-.02q.228-.29.482-.56l.014-.016q.254-.27.532-.518l.02-.018q.279-.248.58-.47l.022-.016q.302-.222.624-.416l.022-.014q.32-.193.66-.357l.024-.01q.34-.164.696-.296l.027-.01q.356-.132.726-.23l.028-.006q.37-.098.75-.16l.032-.004q.38-.062.77-.086h.032q.39-.024.78-.008h.03q.39.016.776.07l.028.006q.387.054.766.148"/>
+                        </svg>
+                        Descargar PDF
+                    </button>
+                </div>
+                <div class="card-body" id="detalle-actividad">
+                    <div class="text-center">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p>Cargando detalles de la actividad...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Incluir jsPDF para generar PDFs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+    // Variables globales
+    let actividad = null;
+    
+    // Función para formatear fechas
+    function formatearFecha(fechaStr) {
+        const fecha = new Date(fechaStr);
+        return fecha.toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    }
+    
+    // Función para cargar los detalles de la actividad
+    function cargarDetalleActividad(id) {
+        const detalleContainer = document.getElementById('detalle-actividad');
+        
+        fetch(`/api/actividades/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                actividad = data;
+                
+                const fechaInicio = formatearFecha(actividad.fechaInicio);
+                const fechaFin = formatearFecha(actividad.fechaFin);
+                
+                detalleContainer.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3>${actividad.nombre}</h3>
+                            <div class="mb-4">
+                                <span class="badge bg-${actividad.tipo === 'Docencia' ? 'primary' : actividad.tipo === 'Investigación' ? 'success' : 'warning'} mb-2">${actividad.tipo}</span>
+                                <span class="badge bg-secondary mb-2">Semestre ${actividad.semestre}</span>
+                                ${actividad.movilidad && actividad.movilidad !== 'No aplica' ? `<span class="badge bg-info mb-2">Movilidad ${actividad.movilidad}</span>` : ''}
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <h5>Información General</h5>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><strong>Fechas:</strong> ${fechaInicio} - ${fechaFin}</li>
+                                        <li class="list-group-item"><strong>Lugar:</strong> ${actividad.lugar}</li>
+                                        <li class="list-group-item"><strong>Responsable:</strong> ${actividad.responsable}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Detalles Adicionales</h5>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><strong>Temática:</strong> ${actividad.tematica || 'No especificada'}</li>
+                                        <li class="list-group-item"><strong>Creado por:</strong> ${actividad.creadoPor?.name || 'Usuario del sistema'}</li>
+                                        <li class="list-group-item"><strong>Fecha de registro:</strong> ${formatearFecha(actividad.createdAt)}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h5>Descripción</h5>
+                                <div class="card">
+                                    <div class="card-body">
+                                        ${actividad.descripcion || 'No hay descripción disponible para esta actividad.'}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            ${actividad.evidenciaUrl ? `
+                                <div class="mb-4">
+                                    <h5>Evidencia</h5>
+                                    <a href="${actividad.evidenciaUrl}" target="_blank" class="btn btn-outline-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark me-1" viewBox="0 0 16 16">
+                                            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+                                        </svg>
+                                        Ver evidencia
+                                    </a>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Estado de la Actividad</h5>
+                                </div>
+                                <div class="card-body">
+                                    ${getEstadoActividad(actividad)}
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Acciones</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <a href="/consultar_actividades" class="btn btn-outline-secondary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left me-1" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                                            </svg>
+                                            Volver a la lista
+                                        </a>
+                                        <button id="descargar-pdf-btn" class="btn btn-outline-danger">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-pdf me-1" viewBox="0 0 16 16">
+                                                <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
+                                                <path d="M4.603 12.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.187-.012.395-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.065.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.6 11.6 0 0 0-1.997.406 11.3 11.3 0 0 1-1.021 1.51c-.29.35-.608.655-.926.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.093.031c.075-.001.203-.05.379-.217.589-.484.777-.927.779-.934.2.161.38.347.579.543.099.096.188.184.277.276.027.028.085.133.067.21-.011.048-.07.106-.183.157-.129.059-.448.175-.76.292l-.012.84q-.91.603-.903 1.853v.007q-.528.285-1.028.528l-.036.018q-.515.27-.997.675l-.048.04c-.12.098-.248.202-.335.34-.036.058-.075.138-.064.217.011.088.073.165.179.205.106.04.195.011.254-.071.023-.03.049-.075.066-.127a.4.4 0 0 0 .022-.13c.001-.042-.012-.178-.093-.283-.028-.037-.056-.108-.03-.148.024-.036.135-.065.19-.084l.05-.016q.36-.12.735-.245c.275-.091.542-.18.793-.267v.007a1.2 1.2 0 0 0 .076-.024q.43-.159.86-.403l.025-.013q.242-.135.5-.3l.056-.035q.368-.23.747-.515l.032-.025q.322-.248.62-.54l.045-.044q.334-.338.6-.724l.014-.022c.197-.32.33-.697.33-.697s.229.297.366.52l.036.06q.154.255.29.544l.017.036q.125.272.235.556l.033.087.035.092q.082.223.154.458l.025.085q.119.402.19.838l.014.083q.064.425.07.898v.042q.003.23-.012.457l-.01.105c-.01.149-.035.297-.053.445l-.01.075c-.023.163-.053.316-.084.469l-.016.09c-.033.159-.07.318-.112.475l-.031.121c-.023.09-.047.178-.073.266l-.031.097q-.099.339-.225.67l-.03.078q-.126.32-.281.635l-.038.078q-.155.31-.346.608l-.041.066q-.198.305-.433.6l-.045.058q-.235.293-.501.57l-.048.051q-.267.275-.564.532l-.05.044q-.295.254-.61.486l-.049.036q-.322.232-.664.435l-.045.027q-.336.197-.69.365l-.044.022q-.354.17-.723.3l-.036.013q-.361.125-.733.204l-.032.007q-.372.079-.748.107l-.034.003q-.367.027-.733.003l-.036-.002q-.366-.024-.728-.098l-.031-.007q-.361-.074-.714-.193l-.029-.01q-.356-.123-.697-.29l-.03-.014q-.346-.171-.676-.384l-.024-.016q-.324-.214-.628-.465l-.024-.021q-.304-.252-.585-.537l-.017-.018q-.282-.285-.54-.595l-.018-.022q-.255-.31-.486-.645l-.014-.021q-.234-.339-.44-.695l-.01-.019q-.205-.356-.38-.728l-.008-.018q-.177-.375-.323-.76l-.007-.022c-.088-.232-.168-.465-.235-.698l-.007-.027q-.099-.343-.167-.691l-.006-.028q-.069-.35-.107-.702l-.003-.025q-.038-.352-.044-.704v-.022q-.007-.353.017-.704l.003-.026q.023-.35.078-.698l.005-.028q.055-.347.14-.69l.006-.024q.085-.343.2-.68l.01-.03q.114-.336.258-.665l.01-.022q.144-.33.317-.651l.014-.026q.172-.32.372-.626l.013-.02q.2-.307.428-.596l.015-.02q.228-.29.482-.56l.014-.016q.254-.27.532-.518l.02-.018q.279-.248.58-.47l.022-.016q.302-.222.624-.416l.022-.014q.32-.193.66-.357l.024-.01q.34-.164.696-.296l.027-.01q.356-.132.726-.23l.028-.006q.37-.098.75-.16l.032-.004q.38-.062.77-.086h.032q.39-.024.78-.008h.03q.39.016.776.07l.028.006q.387.054.766.148"/>
+                                            </svg>
+                                            Descargar PDF
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Agregar event listener al botón de descargar PDF
+                document.getElementById('descargar-pdf-btn').addEventListener('click', function() {
+                    generarPDF(actividad);
+                });
+            })
+            .catch(err => {
+                console.error('Error al cargar detalle de actividad:', err);
+                detalleContainer.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h4 class="alert-heading">Error al cargar los detalles</h4>
+                        <p>No se pudo cargar la información de la actividad. Por favor, intente nuevamente.</p>
+                        <hr>
+                        <p class="mb-0">Si el problema persiste, contacte al administrador del sistema.</p>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="/consultar_actividades" class="btn btn-outline-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left me-1" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                            </svg>
+                            Volver a la lista
+                        </a>
+                    </div>
+                `;
+            });
+    }
+    
+    // Función para determinar el estado de la actividad
+    function getEstadoActividad(actividad) {
+        const hoy = new Date();
+        const fechaInicio = new Date(actividad.fechaInicio);
+        const fechaFin = new Date(actividad.fechaFin);
+        
+        let estadoHTML = '';
+        
+        if (hoy < fechaInicio) {
+            // Actividad futura
+            const diasFaltantes = Math.ceil((fechaInicio - hoy) / (1000 * 60 * 60 * 24));
+            estadoHTML = `
+                <div class="alert alert-info mb-3">
+                    <h6 class="alert-heading">Actividad Próxima</h6>
+                    <p class="mb-0">Faltan ${diasFaltantes} día(s) para el inicio</p>
+                </div>
+                <div class="progress mb-3" style="height: 20px;">
+                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%"></div>
+                </div>
+            `;
+        } else if (hoy >= fechaInicio && hoy <= fechaFin) {
+            // Actividad en curso
+            const duracionTotal = fechaFin - fechaInicio;
+            const transcurrido = hoy - fechaInicio;
+            const porcentaje = Math.min(100, Math.round((transcurrido / duracionTotal) * 100));
+            
+            estadoHTML = `
+                <div class="alert alert-success mb-3">
+                    <h6 class="alert-heading">Actividad en Curso</h6>
+                    <p class="mb-0">Progreso: ${porcentaje}%</p>
+                </div>
+                <div class="progress mb-3" style="height: 20px;">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: ${porcentaje}%"></div>
+                </div>
+            `;
+        } else {
+            // Actividad finalizada
+            const diasTranscurridos = Math.ceil((hoy - fechaFin) / (1000 * 60 * 60 * 24));
+            estadoHTML = `
+                <div class="alert alert-secondary mb-3">
+                    <h6 class="alert-heading">Actividad Finalizada</h6>
+                    <p class="mb-0">Hace ${diasTranscurridos} día(s)</p>
+                </div>
+                <div class="progress mb-3" style="height: 20px;">
+                    <div class="progress-bar bg-secondary" role="progressbar" style="width: 100%"></div>
+                </div>
+            `;
+        }
+        
+        return estadoHTML;
+    }
+    
+    // Función para generar PDF
+    function generarPDF(actividad) {
+        const doc = new jsPDF();
+        
+        // Título
+        doc.setFontSize(16);
+        doc.setTextColor(220, 53, 69); // Color rojo (Bootstrap danger)
+        doc.text('Detalle de Actividad - ACTISIS', 105, 20, { align: 'center' });
+        
+        // Nombre de la actividad
+        doc.setFontSize(14);
+        doc.text(actividad.nombre, 105, 30, { align: 'center' });
+        
+        // Información básica
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Tipo: ${actividad.tipo || 'No especificado'}`, 20, 50);
+        doc.text(`Fechas: ${new Date(actividad.fechaInicio).toLocaleDateString()} - ${new Date(actividad.fechaFin).toLocaleDateString()}`, 20, 60);
+        doc.text(`Lugar: ${actividad.lugar || 'No especificado'}`, 20, 70);
+        doc.text(`Responsable: ${actividad.responsable || 'No especificado'}`, 20, 80);
+        doc.text(`Semestre: ${actividad.semestre || 'No especificado'}`, 140, 50);
+        doc.text(`Movilidad: ${actividad.movilidad || 'No especificada'}`, 140, 60);
+        
+        // Descripción
+        doc.setFontSize(13);
+        doc.text('Descripción:', 20, 100);
+        doc.setFontSize(11);
+        
+        // Manejar texto de descripción largo (dividirlo en múltiples líneas)
+        const descripcionLines = doc.splitTextToSize(actividad.descripcion || 'No especificada', 170);
+        doc.text(descripcionLines, 20, 110);
+        
+        // Calcular posición Y para la temática y evidencia
+        const posY = 120 + (descripcionLines.length * 7);
+        doc.text(`Temática: ${actividad.tematica || 'No especificada'}`, 20, posY);
+        
+        // Debug: Mostrar el valor de actividad.evidenciaUrl
+        console.log('Generando PDF, actividad:', actividad);
+        console.log('Generando PDF, actividad.evidenciaUrl:', actividad.evidenciaUrl);
+
+        // Evidencia
+        if (actividad.evidenciaUrl && actividad.evidenciaUrl.trim() !== '') {
+            const fullEvidenciaUrl = `${window.location.origin}/${actividad.evidenciaUrl.replace(/^\//,'')}`;
+            console.log('URL de evidencia para PDF:', fullEvidenciaUrl);
+            doc.setTextColor(0, 0, 255); // Color azul para links
+            doc.textWithLink('Ver Evidencia Adjunta', 20, posY + 10, { url: fullEvidenciaUrl });
+            doc.setTextColor(0, 0, 0); // Restablecer color de texto
+        }
+
+        // Pie de página
+        doc.setFontSize(10);
+        doc.text('Universidad Francisco de Paula Santander - Programa de Ingeniería de Sistemas', 105, 280, { align: 'center' });
+        doc.text(`Generado el: ${new Date().toLocaleDateString('es-ES')}`, 105, 285, { align: 'center' });
+        
+        // Guardar PDF
+        doc.save(`Actividad_${actividad.nombre.replace(/\s+/g, '_')}.pdf`);
+    }
+    
+    // Inicializar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener el ID de la actividad de la URL
+        const id = '<%= id %>';
+        
+        // Cargar los detalles de la actividad
+        cargarDetalleActividad(id);
+        
+        // Event listener para el botón de descargar PDF en el header
+        document.getElementById('descargar-pdf').addEventListener('click', function() {
+            console.log('Botón Descargar PDF clickeado'); // Nuevo log aquí
+            if (actividad) {
+                generarPDF(actividad);
+            } else {
+                alert('Espere a que se carguen los datos de la actividad.');
+            }
+        });
+    });
+</script>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,651 @@
+<%- include('partials/header', { title: 'Dashboard - ACTISIS' }) %>
+
+<%- include('partials/navbar', { user: data, page: 'dashboard' }) %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Dashboard Principal</h1>
+            <p>Bienvenido, <%= data.email %>!</p>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Actividades En Curso</h5>
+                    <button id="exportar-pdf" class="btn btn-sm btn-outline-light">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-pdf me-1" viewBox="0 0 16 16">
+                            <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
+                            <path d="M4.603 12.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645a20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.187-.012.395-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.065.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.6 11.6 0 0 0-1.997.406 11.3 11.3 0 0 1-1.021 1.51c-.29.35-.608.655-.926.787a.8.8 0 0 1-.58.029"/>
+                        </svg>
+                        Exportar PDF
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Tipo</th>
+                                    <th scope="col">Lugar</th>
+                                    <th scope="col">Docente</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activity-list">
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        <div class="spinner-border text-danger" role="status">
+                                            <span class="visually-hidden">Cargando...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-end mt-2">
+                        <a href="/consultar_actividades" class="btn btn-sm btn-outline-danger">Ver todas las actividades</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Próximas Actividades</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Tipo</th>
+                                    <th scope="col">Lugar</th>
+                                    <th scope="col">Docente</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="proximas-activity-list">
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        <div class="spinner-border text-danger" role="status">
+                                            <span class="visually-hidden">Cargando...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Accesos Rápidos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="/registro_actividad" class="btn btn-outline-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle me-1" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                            </svg>
+                            Registrar Nueva Actividad
+                        </a>
+                        <a href="/consultar_actividades" class="btn btn-outline-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-1" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                            </svg>
+                            Consultar Actividades
+                        </a>
+                        <a href="/generar_reporte" class="btn btn-outline-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text me-1" viewBox="0 0 16 16">
+                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                            </svg>
+                            Generar Reporte
+                        </a>
+                        <% if (data.role === 'admin') { %>
+                            <a href="/gestionar_usuarios" class="btn btn-outline-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people me-1" viewBox="0 0 16 16">
+                                    <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                </svg>
+                                Gestionar Usuarios (Admin)
+                            </a>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Resumen Estadístico</h5>
+                </div>
+                <div class="card-body">
+                    <div id="stats-container">
+                        <div class="text-center">
+                            <div class="spinner-border text-danger" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ver detalles -->
+<div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="detalleModalLabel">Detalles de la Actividad</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detalle-actividad-contenido">
+                <div class="text-center">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" id="descargar-pdf-detalle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-pdf me-1" viewBox="0 0 16 16">
+                        <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
+                        <path d="M4.603 12.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645a20 20 0 0 0 1.062-2.227a7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.187-.012.395-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686a5.8 5.8 0 0 1 1.334.05c.364.065.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95a11.6 11.6 0 0 0-1.997.406a11.3 11.3 0 0 1-1.021 1.51c-.29.35-.608.655-.926.787a.8.8 0 0 1-.58.029"/>
+                    </svg>
+                    Descargar PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Incluir jsPDF para generar PDFs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Variables globales
+    let actividadesEnCurso = [];
+    let actividadesProximas = [];
+    let actividadSeleccionada = null;
+    let detalleModal;
+    let estadisticasChart = null;
+    
+    // Función para formatear fechas
+    function formatearFecha(fechaStr) {
+        const fecha = new Date(fechaStr);
+        return fecha.toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    }
+    
+    // Función para mostrar detalles de una actividad
+    function mostrarDetalle(id) {
+        const contenedor = document.getElementById('detalle-actividad-contenido');
+        contenedor.innerHTML = `
+            <div class="text-center">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        `;
+        
+        fetch(`/api/actividades/${id}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Error en la respuesta del servidor: ' + res.status);
+                }
+                return res.json();
+            })
+            .then(actividad => {
+                actividadSeleccionada = actividad;
+                
+                const fechaInicio = formatearFecha(actividad.fechaInicio);
+                const fechaFin = formatearFecha(actividad.fechaFin);
+                
+                contenedor.innerHTML = `
+                    <h4 class="mb-3">${actividad.nombre}</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Tipo:</strong> ${actividad.tipo}</p>
+                            <p><strong>Fechas:</strong> ${fechaInicio} - ${fechaFin}</p>
+                            <p><strong>Lugar:</strong> ${actividad.lugar}</p>
+                            <p><strong>Responsable:</strong> ${actividad.responsable}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Semestre:</strong> ${actividad.semestre}</p>
+                            <p><strong>Movilidad:</strong> ${actividad.movilidad || 'No aplica'}</p>
+                            <p><strong>Temática:</strong> ${actividad.tematica || 'No especificada'}</p>
+                            <p><strong>Creado por:</strong> ${actividad.creadoPor ? actividad.creadoPor.email : 'No disponible'}</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <h5>Descripción</h5>
+                        <p>${actividad.descripcion || 'No hay descripción disponible.'}</p>
+                    </div>
+                    ${actividad.evidenciaUrl ? `
+                        <div class="mt-3">
+                            <h5>Evidencia</h5>
+                            <a href="${actividad.evidenciaUrl}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-link-45deg" viewBox="0 0 16 16">
+                                    <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z"/>
+                                    <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z"/>
+                                </svg>
+                                Ver Evidencia
+                            </a>
+                        </div>
+                    ` : ''}
+                `;
+                
+                detalleModal.show();
+            })
+            .catch(err => {
+                console.error('Error al cargar detalles de actividad:', err);
+                contenedor.innerHTML = `
+                    <div class="alert alert-danger">
+                        Error al cargar detalles. Intente nuevamente. Detalles: ${err.message}
+                    </div>
+                `;
+            });
+    }
+    
+    // Función para cargar actividades en curso
+    function cargarActividadesEnCurso() {
+        const tablaBody = document.getElementById('activity-list');
+        
+        fetch('/api/actividades/encurso')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Error en la respuesta del servidor: ' + res.status);
+                }
+                return res.json();
+            })
+            .then(data => {
+                actividadesEnCurso = data;
+                tablaBody.innerHTML = '';
+                
+                if (actividadesEnCurso.length === 0) {
+                    tablaBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center">No hay actividades en curso actualmente.</td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                actividadesEnCurso.forEach(actividad => {
+                    const fechaInicio = formatearFecha(actividad.fechaInicio);
+                    const fechaFin = formatearFecha(actividad.fechaFin);
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${actividad.nombre}</td>
+                        <td>${fechaInicio} - ${fechaFin}</td>
+                        <td>${actividad.tipo}</td>
+                        <td>${actividad.lugar}</td>
+                        <td>${actividad.responsable}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info ver-detalle" data-id="${actividad._id}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                </svg>
+                            </button>
+                        </td>
+                    `;
+                    tablaBody.appendChild(tr);
+                });
+                
+                // Agregar event listeners a los botones de detalle
+                document.querySelectorAll('.ver-detalle').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        mostrarDetalle(id);
+                    });
+                });
+            })
+            .catch(err => {
+                console.error('Error al cargar actividades en curso:', err);
+                tablaBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-danger">
+                            Error al cargar actividades. Intente nuevamente. Detalles: ${err.message}
+                        </td>
+                    </tr>
+                `;
+            });
+    }
+    
+    // Función para cargar próximas actividades
+    function cargarActividadesProximas() {
+        const tablaBody = document.getElementById('proximas-activity-list');
+        
+        fetch('/api/actividades/proximas')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Error en la respuesta del servidor: ' + res.status);
+                }
+                return res.json();
+            })
+            .then(data => {
+                actividadesProximas = data;
+                tablaBody.innerHTML = '';
+                
+                if (actividadesProximas.length === 0) {
+                    tablaBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center">No hay próximas actividades programadas.</td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                actividadesProximas.forEach(actividad => {
+                    const fechaInicio = formatearFecha(actividad.fechaInicio);
+                    const fechaFin = formatearFecha(actividad.fechaFin);
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${actividad.nombre}</td>
+                        <td>${fechaInicio} - ${fechaFin}</td>
+                        <td>${actividad.tipo}</td>
+                        <td>${actividad.lugar}</td>
+                        <td>${actividad.responsable}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info ver-detalle" data-id="${actividad._id}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                </svg>
+                            </button>
+                        </td>
+                    `;
+                    tablaBody.appendChild(tr);
+                });
+                
+                // Agregar event listeners a los botones de detalle
+                document.querySelectorAll('.ver-detalle').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        mostrarDetalle(id);
+                    });
+                });
+            })
+            .catch(err => {
+                console.error('Error al cargar próximas actividades:', err);
+                tablaBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-danger">
+                            Error al cargar actividades. Intente nuevamente. Detalles: ${err.message}
+                        </td>
+                    </tr>
+                `;
+            });
+    }
+    
+    // Función para cargar estadísticas
+    function cargarEstadisticas() {
+        const statsContainer = document.getElementById('stats-container');
+        
+        // Obtener todas las actividades para generar estadísticas
+        fetch('/api/actividades')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Error en la respuesta del servidor: ' + res.status);
+                }
+                return res.json();
+            })
+            .then(actividades => {
+                // Si no hay actividades, mostrar mensaje
+                if (actividades.length === 0) {
+                    statsContainer.innerHTML = `
+                        <div class="alert alert-info">
+                            No hay actividades registradas para generar estadísticas.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Contar actividades por tipo
+                const tiposCount = {};
+                actividades.forEach(actividad => {
+                    if (!tiposCount[actividad.tipo]) {
+                        tiposCount[actividad.tipo] = 0;
+                    }
+                    tiposCount[actividad.tipo]++;
+                });
+                
+                // Contar actividades en curso
+                const hoy = new Date();
+                const enCursoCount = actividades.filter(actividad => {
+                    const fechaInicio = new Date(actividad.fechaInicio);
+                    const fechaFin = new Date(actividad.fechaFin);
+                    return hoy >= fechaInicio && hoy <= fechaFin;
+                }).length;
+                
+                // Contar próximas actividades
+                const proximasCount = actividades.filter(actividad => {
+                    const fechaInicio = new Date(actividad.fechaInicio);
+                    return fechaInicio > hoy;
+                }).length;
+                
+                // Generar HTML para estadísticas
+                statsContainer.innerHTML = `
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">En Curso</h6>
+                                    <p class="card-text h3">${enCursoCount}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">Próximas</h6>
+                                    <p class="card-text h3">${proximasCount}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h6>Distribución por Tipo</h6>
+                        <canvas id="tipos-chart"></canvas>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-muted small">Total de actividades: ${actividades.length}</p>
+                    </div>
+                `;
+                
+                // Crear gráfico de tipos
+                const ctx = document.getElementById('tipos-chart').getContext('2d');
+                const tipos = Object.keys(tiposCount);
+                const cantidades = tipos.map(tipo => tiposCount[tipo]);
+                
+                if (estadisticasChart) {
+                    estadisticasChart.destroy();
+                }
+                
+                if (tipos.length > 0) {
+                    estadisticasChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: tipos,
+                            datasets: [{
+                                data: cantidades,
+                                backgroundColor: [
+                                    'rgba(54, 162, 235, 0.7)',
+                                    'rgba(75, 192, 192, 0.7)',
+                                    'rgba(255, 206, 86, 0.7)',
+                                    'rgba(153, 102, 255, 0.7)',
+                                    'rgba(255, 99, 132, 0.7)'
+                                ],
+                                borderColor: [
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 99, 132, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        boxWidth: 12,
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    document.getElementById('tipos-chart').innerHTML = 'No hay datos para mostrar';
+                }
+            })
+            .catch(err => {
+                console.error('Error al cargar estadísticas:', err);
+                statsContainer.innerHTML = `
+                    <div class="alert alert-danger">
+                        Error al cargar estadísticas. Intente nuevamente. Detalles: ${err.message}
+                    </div>
+                `;
+            });
+    }
+    
+    // Función para generar PDF de actividades en curso
+    function generarPDFActividades() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Título
+        doc.setFontSize(18);
+        doc.setTextColor(200, 35, 51); // Color rojo UFPS
+        doc.text('Actividades En Curso - ACTISIS', 105, 20, { align: 'center' });
+        
+        // Fecha de generación
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text(`Fecha de generación: ${new Date().toLocaleDateString('es-ES')}`, 105, 30, { align: 'center' });
+        
+        // Tabla de actividades
+        const tableColumn = ["Nombre", "Fechas", "Tipo", "Lugar", "Responsable"];
+        const tableRows = [];
+        
+        actividadesEnCurso.forEach(actividad => {
+            const fechaInicio = formatearFecha(actividad.fechaInicio);
+            const fechaFin = formatearFecha(actividad.fechaFin);
+            
+            const actividadData = [
+                actividad.nombre,
+                `${fechaInicio} - ${fechaFin}`,
+                actividad.tipo,
+                actividad.lugar,
+                actividad.responsable
+            ];
+            
+            tableRows.push(actividadData);
+        });
+        
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 40,
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [200, 35, 51] }
+        });
+        
+        // Pie de página
+        doc.setFontSize(8);
+        doc.setTextColor(100, 100, 100);
+        doc.text('Universidad Francisco de Paula Santander - Programa de Ingeniería de Sistemas', 105, 285, { align: 'center' });
+        doc.text('ACTISIS - Sistema de Gestión de Actividades', 105, 290, { align: 'center' });
+        
+        // Guardar PDF
+        doc.save(`Actividades_En_Curso_${new Date().toISOString().split('T')[0]}.pdf`);
+    }
+    
+    // Función para generar PDF de detalle de actividad
+    function generarPDFDetalle(actividad) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Título
+        doc.setFontSize(18);
+        doc.setTextColor(200, 35, 51); // Color rojo UFPS
+        doc.text('Detalle de Actividad - ACTISIS', 105, 20, { align: 'center' });
+        
+        // Información de la actividad
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text(actividad.nombre, 105, 30, { align: 'center' });
+        
+        doc.setFontSize(12);
+        doc.text(`Tipo: ${actividad.tipo}`, 20, 45);
+        doc.text(`Fechas: ${formatearFecha(actividad.fechaInicio)} - ${formatearFecha(actividad.fechaFin)}`, 20, 55);
+        doc.text(`Lugar: ${actividad.lugar}`, 20, 65);
+        doc.text(`Responsable: ${actividad.responsable}`, 20, 75);
+        doc.text(`Semestre: ${actividad.semestre}`, 20, 85);
+        doc.text(`Movilidad: ${actividad.movilidad || 'No aplica'}`, 20, 95);
+        
+        // Descripción
+        doc.text('Descripción:', 20, 110);
+        const descripcionLines = doc.splitTextToSize(actividad.descripcion || 'No hay descripción disponible.', 170);
+        doc.text(descripcionLines, 20, 120);
+        
+        // Pie de página
+        doc.setFontSize(8);
+        doc.setTextColor(100, 100, 100);
+        doc.text('Universidad Francisco de Paula Santander - Programa de Ingeniería de Sistemas', 105, 285, { align: 'center' });
+        doc.text('ACTISIS - Sistema de Gestión de Actividades', 105, 290, { align: 'center' });
+        
+        // Guardar PDF
+        doc.save(`Actividad_${actividad.nombre.replace(/\s+/g, '_')}.pdf`);
+    }
+    
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar modal
+        detalleModal = new bootstrap.Modal(document.getElementById('detalleModal'));
+        
+        // Cargar datos al iniciar
+        cargarActividadesEnCurso();
+        cargarActividadesProximas();
+        cargarEstadisticas();
+        
+        // Exportar PDF de actividades en curso
+        document.getElementById('exportar-pdf').addEventListener('click', function() {
+            if (actividadesEnCurso.length > 0) {
+                generarPDFActividades();
+            } else {
+                alert('No hay actividades en curso para exportar.');
+            }
+        });
+        
+        // Descargar PDF de detalle
+        document.getElementById('descargar-pdf-detalle').addEventListener('click', function() {
+            if (actividadSeleccionada) {
+                generarPDFDetalle(actividadSeleccionada);
+            }
+        });
+    });
+</script>
+
+<%- include('partials/footer') %>

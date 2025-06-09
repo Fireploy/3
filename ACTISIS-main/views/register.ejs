@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - ACTISIS</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form-container">
+            <form id="register-form">
+                <h2>Registro de Usuario</h2>
+
+                 <div id="register-message" class="message">
+                     <% if (typeof message !== 'undefined' && message) { %>
+                        <p class="<%= message.type %>"><%= message.text %></p>
+                    <% } %>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-name">Nombre Completo</label>
+                    <input type="text" id="register-name" name="name" required>
+                 </div>
+
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-password">Contraseña</label>
+                    <input type="password" id="register-password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirmar Contraseña</label>
+                    <input type="password" id="register-confirm-password" name="confirm-password" required>
+                 </div>
+
+                <button type="submit">Registrar</button>
+
+                <p class="switch-form">
+                    ¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const $ = el => document.querySelector(el);
+        const registerForm = $('#register-form');
+        const registerMessage = $('#register-message');
+
+        registerForm?.addEventListener('submit', e => {
+            e.preventDefault();
+            const name = $('#register-name').value;
+            const email = $('#register-email').value;
+            const password = $('#register-password').value;
+            const confirmPassword = $('#register-confirm-password').value;
+
+            // Limpiar mensajes anteriores
+            registerMessage.innerHTML = '';
+            registerMessage.className = 'message'; // Reset class
+
+            if (password !== confirmPassword) {
+                registerMessage.innerHTML = '<p class="error">Las contraseñas no coinciden.</p>';
+                return;
+            }
+
+            fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            })
+            .then(res => res.json().then(data => ({ ok: res.ok, status: res.status, data })))
+            .then(({ ok, data }) => {
+                if (ok) {
+                    registerMessage.innerHTML = '<p class="success">¡Usuario registrado exitosamente! Serás redirigido al inicio de sesión.</p>';
+                    setTimeout(() => {
+                        window.location.href = '/login'; // Redirige a login después de registrar
+                    }, 2500);
+                } else {
+                     registerMessage.innerHTML = `<p class="error">${data.message || 'Error al registrar el usuario.'}</p>`;
+                }
+            })
+             .catch(err => {
+                console.error('Fetch Error:', err);
+                registerMessage.innerHTML = '<p class="error">Error de conexión. Intenta más tarde.</p>';
+            });
+        });
+    </script>
+</body>
+</html>

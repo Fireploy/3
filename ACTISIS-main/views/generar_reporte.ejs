@@ -1,0 +1,986 @@
+<%- include('partials/header', { title: 'Generar Reporte - ACTISIS' }) %>
+
+<%- include('partials/navbar', { user: data, page: 'generar_reporte' }) %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Generación de Reportes</h4>
+                </div>
+                <div class="card-body">
+                    <form id="reporte-form" class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Filtros</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="reporte-tipo" class="form-label">Tipo de Actividad</label>
+                                        <select class="form-select" id="reporte-tipo">
+                                            <option value="">Todos</option>
+                                            <option value="Docencia">Docencia</option>
+                                            <option value="Investigación">Investigación</option>
+                                            <option value="Extensión">Extensión</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="reporte-semestre" class="form-label">Semestre</label>
+                                        <select class="form-select" id="reporte-semestre">
+                                            <option value="">Todos</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="reporte-fecha-desde" class="form-label">Fecha Desde</label>
+                                        <input type="date" class="form-control" id="reporte-fecha-desde">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="reporte-fecha-hasta" class="form-label">Fecha Hasta</label>
+                                        <input type="date" class="form-control" id="reporte-fecha-hasta">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="reporte-responsable" class="form-label">Responsable</label>
+                                        <input type="text" class="form-control" id="reporte-responsable" placeholder="Nombre del responsable">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Opciones de Reporte</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="reporte-formato" class="form-label">Formato de Reporte</label>
+                                        <select class="form-select" id="reporte-formato">
+                                            <option value="pdf">PDF</option>
+                                            <option value="excel">Excel</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="reporte-tipo-reporte" class="form-label">Tipo de Reporte</label>
+                                        <select class="form-select" id="reporte-tipo-reporte">
+                                            <option value="detallado">Detallado</option>
+                                            <option value="resumido">Resumido</option>
+                                            <option value="estadistico">Estadístico</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Incluir en el Reporte</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="incluir-descripcion" checked>
+                                            <label class="form-check-label" for="incluir-descripcion">
+                                                Descripción de actividades
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="incluir-responsables" checked>
+                                            <label class="form-check-label" for="incluir-responsables">
+                                                Información de responsables
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="incluir-graficos">
+                                            <label class="form-check-label" for="incluir-graficos">
+                                                Gráficos estadísticos
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="reporte-titulo" class="form-label">Título del Reporte</label>
+                                        <input type="text" class="form-control" id="reporte-titulo" value="Reporte de Actividades - ACTISIS">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text me-1" viewBox="0 0 16 16">
+                                    <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+                                    <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                                </svg>
+                                Generar Reporte
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Vista Previa</h5>
+                </div>
+                <div class="card-body">
+                    <div id="reporte-preview">
+                        <div class="text-center py-5">
+                            <p class="text-muted">Seleccione los filtros y opciones para generar una vista previa del reporte.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Incluir jsPDF y otras librerías necesarias -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Variables globales
+    let actividades = [];
+    let graficos = {};
+    
+    // Función para formatear fechas
+    function formatearFecha(fechaStr) {
+        const fecha = new Date(fechaStr);
+        return fecha.toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    }
+    
+    // Función para cargar actividades con filtros
+    function cargarActividades(filtros = {}) {
+        const previewContainer = document.getElementById('reporte-preview');
+        previewContainer.innerHTML = `
+            <div class="text-center py-5">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-2">Cargando datos para el reporte...</p>
+            </div>
+        `;
+        
+        // Construir URL con parámetros de filtro
+        let url = '/api/actividades';
+        const params = new URLSearchParams();
+        
+        if (filtros.tipo) params.append('tipo', filtros.tipo);
+        if (filtros.semestre) params.append('semestre', filtros.semestre);
+        if (filtros.responsable) params.append('responsable', filtros.responsable);
+        if (filtros.fechaDesde) params.append('fechaDesde', filtros.fechaDesde);
+        if (filtros.fechaHasta) params.append('fechaHasta', filtros.fechaHasta);
+        
+        if (params.toString()) {
+            url += '?' + params.toString();
+        }
+        
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                actividades = data;
+                
+                if (actividades.length === 0) {
+                    previewContainer.innerHTML = `
+                        <div class="alert alert-warning">
+                            No se encontraron actividades con los filtros seleccionados.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Generar vista previa según el tipo de reporte seleccionado
+                const tipoReporte = document.getElementById('reporte-tipo-reporte').value;
+                
+                if (tipoReporte === 'detallado') {
+                    generarVistaPreviewDetallado(previewContainer);
+                } else if (tipoReporte === 'resumido') {
+                    generarVistaPreviewResumido(previewContainer);
+                } else if (tipoReporte === 'estadistico') {
+                    generarVistaPreviewEstadistico(previewContainer);
+                }
+            })
+            .catch(err => {
+                console.error('Error al cargar actividades:', err);
+                previewContainer.innerHTML = `
+                    <div class="alert alert-danger">
+                        Error al cargar datos para el reporte. Intente nuevamente.
+                    </div>
+                `;
+            });
+    }
+    
+    // Función para generar vista previa de reporte detallado
+    function generarVistaPreviewDetallado(container) {
+        let html = `
+            <h4 class="text-center mb-4">${document.getElementById('reporte-titulo').value}</h4>
+            <p class="text-muted mb-4">Fecha de generación: ${new Date().toLocaleDateString('es-ES')}</p>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Fechas</th>
+                            <th>Lugar</th>
+                            <th>Responsable</th>
+                            ${document.getElementById('incluir-descripcion').checked ? '<th>Descripción</th>' : ''}
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+        
+        actividades.forEach(actividad => {
+            const fechaInicio = formatearFecha(actividad.fechaInicio);
+            const fechaFin = formatearFecha(actividad.fechaFin);
+            
+            html += `
+                <tr>
+                    <td>${actividad.nombre}</td>
+                    <td>${actividad.tipo}</td>
+                    <td>${fechaInicio} - ${fechaFin}</td>
+                    <td>${actividad.lugar}</td>
+                    <td>${actividad.responsable}</td>
+                    ${document.getElementById('incluir-descripcion').checked ? `<td>${actividad.descripcion || 'No disponible'}</td>` : ''}
+                </tr>
+            `;
+        });
+        
+        html += `
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center mt-4">
+                <button id="descargar-reporte" class="btn btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download me-1" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                    </svg>
+                    Descargar Reporte
+                </button>
+            </div>
+        `;
+        
+        container.innerHTML = html;
+        
+        // Agregar event listener al botón de descargar
+        document.getElementById('descargar-reporte').addEventListener('click', function() {
+            generarReporte();
+        });
+    }
+    
+    // Función para generar vista previa de reporte resumido
+    function generarVistaPreviewResumido(container) {
+        // Agrupar actividades por tipo
+        const actividadesPorTipo = {};
+        actividades.forEach(actividad => {
+            if (!actividadesPorTipo[actividad.tipo]) {
+                actividadesPorTipo[actividad.tipo] = [];
+            }
+            actividadesPorTipo[actividad.tipo].push(actividad);
+        });
+        
+        let html = `
+            <h4 class="text-center mb-4">${document.getElementById('reporte-titulo').value}</h4>
+            <p class="text-muted mb-4">Fecha de generación: ${new Date().toLocaleDateString('es-ES')}</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Resumen por Tipo de Actividad</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+        `;
+        
+        Object.keys(actividadesPorTipo).forEach(tipo => {
+            html += `
+                <tr>
+                    <td>${tipo}</td>
+                    <td>${actividadesPorTipo[tipo].length}</td>
+                </tr>
+            `;
+        });
+        
+        html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Gráfico de Actividades</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="grafico-tipos"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Listado Resumido de Actividades</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th>Fechas</th>
+                                    <th>Responsable</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+        `;
+        
+        actividades.forEach(actividad => {
+            const fechaInicio = formatearFecha(actividad.fechaInicio);
+            const fechaFin = formatearFecha(actividad.fechaFin);
+            
+            html += `
+                <tr>
+                    <td>${actividad.nombre}</td>
+                    <td>${actividad.tipo}</td>
+                    <td>${fechaInicio} - ${fechaFin}</td>
+                    <td>${actividad.responsable}</td>
+                </tr>
+            `;
+        });
+        
+        html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button id="descargar-reporte" class="btn btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download me-1" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                    </svg>
+                    Descargar Reporte
+                </button>
+            </div>
+        `;
+        
+        container.innerHTML = html;
+        
+        // Crear gráfico de tipos
+        const ctx = document.getElementById('grafico-tipos').getContext('2d');
+        const tipos = Object.keys(actividadesPorTipo);
+        const cantidades = tipos.map(tipo => actividadesPorTipo[tipo].length);
+        
+        if (graficos.tiposChart) {
+            graficos.tiposChart.destroy();
+        }
+        
+        graficos.tiposChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: tipos,
+                datasets: [{
+                    data: cantidades,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Distribución por Tipo de Actividad'
+                    }
+                }
+            }
+        });
+        
+        // Agregar event listener al botón de descargar
+        document.getElementById('descargar-reporte').addEventListener('click', function() {
+            generarReporte();
+        });
+    }
+    
+    // Función para generar vista previa de reporte estadístico
+    function generarVistaPreviewEstadistico(container) {
+        // Agrupar actividades por tipo
+        const actividadesPorTipo = {};
+        actividades.forEach(actividad => {
+            if (!actividadesPorTipo[actividad.tipo]) {
+                actividadesPorTipo[actividad.tipo] = [];
+            }
+            actividadesPorTipo[actividad.tipo].push(actividad);
+        });
+        
+        // Agrupar actividades por semestre
+        const actividadesPorSemestre = {};
+        actividades.forEach(actividad => {
+            if (!actividadesPorSemestre[actividad.semestre]) {
+                actividadesPorSemestre[actividad.semestre] = [];
+            }
+            actividadesPorSemestre[actividad.semestre].push(actividad);
+        });
+        
+        // Agrupar actividades por responsable
+        const actividadesPorResponsable = {};
+        actividades.forEach(actividad => {
+            if (!actividadesPorResponsable[actividad.responsable]) {
+                actividadesPorResponsable[actividad.responsable] = [];
+            }
+            actividadesPorResponsable[actividad.responsable].push(actividad);
+        });
+        
+        let html = `
+            <h4 class="text-center mb-4">${document.getElementById('reporte-titulo').value}</h4>
+            <p class="text-muted mb-4">Fecha de generación: ${new Date().toLocaleDateString('es-ES')}</p>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Distribución por Tipo de Actividad</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="grafico-tipos"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Distribución por Semestre</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="grafico-semestres"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Actividades por Responsable</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="grafico-responsables"></canvas>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Resumen Estadístico</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Total Actividades</h5>
+                                    <p class="card-text display-4">${actividades.length}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Tipos de Actividad</h5>
+                                    <p class="card-text display-4">${Object.keys(actividadesPorTipo).length}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Responsables</h5>
+                                    <p class="card-text display-4">${Object.keys(actividadesPorResponsable).length}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-danger text-white">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Semestres</h5>
+                                    <p class="card-text display-4">${Object.keys(actividadesPorSemestre).length}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button id="descargar-reporte" class="btn btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download me-1" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                    </svg>
+                    Descargar Reporte
+                </button>
+            </div>
+        `;
+        
+        container.innerHTML = html;
+        
+        // Crear gráficos
+        // 1. Gráfico de tipos
+        const ctxTipos = document.getElementById('grafico-tipos').getContext('2d');
+        const tipos = Object.keys(actividadesPorTipo);
+        const cantidadesTipos = tipos.map(tipo => actividadesPorTipo[tipo].length);
+        
+        if (graficos.tiposChart) {
+            graficos.tiposChart.destroy();
+        }
+        
+        graficos.tiposChart = new Chart(ctxTipos, {
+            type: 'pie',
+            data: {
+                labels: tipos,
+                datasets: [{
+                    data: cantidadesTipos,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Distribución por Tipo de Actividad'
+                    }
+                }
+            }
+        });
+        
+        // 2. Gráfico de semestres
+        const ctxSemestres = document.getElementById('grafico-semestres').getContext('2d');
+        const semestres = Object.keys(actividadesPorSemestre);
+        const cantidadesSemestres = semestres.map(semestre => actividadesPorSemestre[semestre].length);
+        
+        if (graficos.semestresChart) {
+            graficos.semestresChart.destroy();
+        }
+        
+        graficos.semestresChart = new Chart(ctxSemestres, {
+            type: 'doughnut',
+            data: {
+                labels: semestres.map(s => `Semestre ${s}`),
+                datasets: [{
+                    data: cantidadesSemestres,
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Distribución por Semestre'
+                    }
+                }
+            }
+        });
+        
+        // 3. Gráfico de responsables (mostrar solo los 5 con más actividades)
+        const responsables = Object.keys(actividadesPorResponsable);
+        const responsablesOrdenados = responsables.sort((a, b) => 
+            actividadesPorResponsable[b].length - actividadesPorResponsable[a].length
+        ).slice(0, 5);
+        
+        const cantidadesResponsables = responsablesOrdenados.map(resp => actividadesPorResponsable[resp].length);
+        
+        const ctxResponsables = document.getElementById('grafico-responsables').getContext('2d');
+        
+        if (graficos.responsablesChart) {
+            graficos.responsablesChart.destroy();
+        }
+        
+        graficos.responsablesChart = new Chart(ctxResponsables, {
+            type: 'bar',
+            data: {
+                labels: responsablesOrdenados,
+                datasets: [{
+                    label: 'Número de Actividades',
+                    data: cantidadesResponsables,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Top 5 Responsables por Número de Actividades'
+                    }
+                }
+            }
+        });
+        
+        // Agregar event listener al botón de descargar
+        document.getElementById('descargar-reporte').addEventListener('click', function() {
+            generarReporte();
+        });
+    }
+    
+    // Función para generar y descargar el reporte
+    function generarReporte() {
+        const formato = document.getElementById('reporte-formato').value;
+        const tipoReporte = document.getElementById('reporte-tipo-reporte').value;
+        const titulo = document.getElementById('reporte-titulo').value;
+        
+        if (formato === 'pdf') {
+            generarReportePDF(tipoReporte, titulo);
+        } else if (formato === 'excel') {
+            alert('La exportación a Excel no está disponible en esta versión. Por favor, seleccione formato PDF.');
+        }
+    }
+    
+    // Función para generar reporte en PDF
+    function generarReportePDF(tipoReporte, titulo) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Título
+        doc.setFontSize(18);
+        doc.setTextColor(200, 35, 51); // Color rojo UFPS
+        doc.text(titulo, 105, 20, { align: 'center' });
+        
+        // Fecha de generación
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text(`Fecha de generación: ${new Date().toLocaleDateString('es-ES')}`, 105, 30, { align: 'center' });
+        
+        // Contenido según tipo de reporte
+        if (tipoReporte === 'detallado') {
+            generarPDFDetallado(doc);
+        } else if (tipoReporte === 'resumido') {
+            generarPDFResumido(doc);
+        } else if (tipoReporte === 'estadistico') {
+            generarPDFEstadistico(doc);
+        }
+        
+        // Pie de página
+        doc.setFontSize(8);
+        doc.setTextColor(100, 100, 100);
+        doc.text('Universidad Francisco de Paula Santander - Programa de Ingeniería de Sistemas', 105, 285, { align: 'center' });
+        doc.text('ACTISIS - Sistema de Gestión de Actividades', 105, 290, { align: 'center' });
+        
+        // Guardar PDF
+        doc.save(`Reporte_ACTISIS_${new Date().toISOString().split('T')[0]}.pdf`);
+    }
+    
+    // Función para generar PDF detallado
+    function generarPDFDetallado(doc) {
+        const incluirDescripcion = document.getElementById('incluir-descripcion').checked;
+        
+        // Tabla de actividades
+        const tableColumn = ["Nombre", "Tipo", "Fechas", "Lugar", "Responsable"];
+        if (incluirDescripcion) tableColumn.push("Descripción");
+        
+        const tableRows = [];
+        
+        actividades.forEach(actividad => {
+            const fechaInicio = formatearFecha(actividad.fechaInicio);
+            const fechaFin = formatearFecha(actividad.fechaFin);
+            
+            const actividadData = [
+                actividad.nombre,
+                actividad.tipo,
+                `${fechaInicio} - ${fechaFin}`,
+                actividad.lugar,
+                actividad.responsable
+            ];
+            
+            if (incluirDescripcion) {
+                actividadData.push(actividad.descripcion || 'No disponible');
+            }
+            
+            tableRows.push(actividadData);
+        });
+        
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 40,
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [200, 35, 51] },
+            columnStyles: incluirDescripcion ? { 5: { cellWidth: 50 } } : {}
+        });
+    }
+    
+    // Función para generar PDF resumido
+    function generarPDFResumido(doc) {
+        // Agrupar actividades por tipo
+        const actividadesPorTipo = {};
+        actividades.forEach(actividad => {
+            if (!actividadesPorTipo[actividad.tipo]) {
+                actividadesPorTipo[actividad.tipo] = [];
+            }
+            actividadesPorTipo[actividad.tipo].push(actividad);
+        });
+        
+        // Tabla resumen por tipo
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Resumen por Tipo de Actividad', 20, 40);
+        
+        const tiposColumn = ["Tipo", "Cantidad"];
+        const tiposRows = [];
+        
+        Object.keys(actividadesPorTipo).forEach(tipo => {
+            tiposRows.push([tipo, actividadesPorTipo[tipo].length.toString()]);
+        });
+        
+        doc.autoTable({
+            head: [tiposColumn],
+            body: tiposRows,
+            startY: 45,
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [200, 35, 51] }
+        });
+        
+        // Tabla de actividades
+        const finalY = doc.lastAutoTable.finalY || 45;
+        
+        doc.setFontSize(14);
+        doc.text('Listado Resumido de Actividades', 20, finalY + 15);
+        
+        const tableColumn = ["Nombre", "Tipo", "Fechas", "Responsable"];
+        const tableRows = [];
+        
+        actividades.forEach(actividad => {
+            const fechaInicio = formatearFecha(actividad.fechaInicio);
+            const fechaFin = formatearFecha(actividad.fechaFin);
+            
+            const actividadData = [
+                actividad.nombre,
+                actividad.tipo,
+                `${fechaInicio} - ${fechaFin}`,
+                actividad.responsable
+            ];
+            
+            tableRows.push(actividadData);
+        });
+        
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: finalY + 20,
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [200, 35, 51] }
+        });
+    }
+    
+    // Función para generar PDF estadístico
+    function generarPDFEstadistico(doc) {
+        // Agrupar actividades por tipo
+        const actividadesPorTipo = {};
+        actividades.forEach(actividad => {
+            if (!actividadesPorTipo[actividad.tipo]) {
+                actividadesPorTipo[actividad.tipo] = [];
+            }
+            actividadesPorTipo[actividad.tipo].push(actividad);
+        });
+        
+        // Agrupar actividades por semestre
+        const actividadesPorSemestre = {};
+        actividades.forEach(actividad => {
+            if (!actividadesPorSemestre[actividad.semestre]) {
+                actividadesPorSemestre[actividad.semestre] = [];
+            }
+            actividadesPorSemestre[actividad.semestre].push(actividad);
+        });
+        
+        // Agrupar actividades por responsable
+        const actividadesPorResponsable = {};
+        actividades.forEach(actividad => {
+            if (!actividadesPorResponsable[actividad.responsable]) {
+                actividadesPorResponsable[actividad.responsable] = [];
+            }
+            actividadesPorResponsable[actividad.responsable].push(actividad);
+        });
+        
+        // Resumen estadístico
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Resumen Estadístico', 20, 40);
+        
+        doc.setFontSize(10);
+        doc.text(`Total de Actividades: ${actividades.length}`, 20, 50);
+        doc.text(`Tipos de Actividad: ${Object.keys(actividadesPorTipo).length}`, 20, 60);
+        doc.text(`Responsables: ${Object.keys(actividadesPorResponsable).length}`, 20, 70);
+        doc.text(`Semestres: ${Object.keys(actividadesPorSemestre).length}`, 20, 80);
+        
+        // Tabla por tipo de actividad
+        doc.setFontSize(14);
+        doc.text('Distribución por Tipo de Actividad', 20, 95);
+        
+        const tiposColumn = ["Tipo", "Cantidad", "Porcentaje"];
+        const tiposRows = [];
+        
+        Object.keys(actividadesPorTipo).forEach(tipo => {
+            const cantidad = actividadesPorTipo[tipo].length;
+            const porcentaje = ((cantidad / actividades.length) * 100).toFixed(2) + '%';
+            tiposRows.push([tipo, cantidad.toString(), porcentaje]);
+        });
+        
+        doc.autoTable({
+            head: [tiposColumn],
+            body: tiposRows,
+            startY: 100,
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [200, 35, 51] }
+        });
+        
+        // Tabla por semestre
+        const finalY1 = doc.lastAutoTable.finalY || 100;
+        
+        doc.setFontSize(14);
+        doc.text('Distribución por Semestre', 20, finalY1 + 15);
+        
+        const semestresColumn = ["Semestre", "Cantidad", "Porcentaje"];
+        const semestresRows = [];
+        
+        Object.keys(actividadesPorSemestre).forEach(semestre => {
+            const cantidad = actividadesPorSemestre[semestre].length;
+            const porcentaje = ((cantidad / actividades.length) * 100).toFixed(2) + '%';
+            semestresRows.push([`Semestre ${semestre}`, cantidad.toString(), porcentaje]);
+        });
+        
+        doc.autoTable({
+            head: [semestresColumn],
+            body: semestresRows,
+            startY: finalY1 + 20,
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [200, 35, 51] }
+        });
+        
+        // Tabla por responsable (top 5)
+        const finalY2 = doc.lastAutoTable.finalY || finalY1 + 20;
+        
+        doc.setFontSize(14);
+        doc.text('Top 5 Responsables por Número de Actividades', 20, finalY2 + 15);
+        
+        const responsablesColumn = ["Responsable", "Cantidad", "Porcentaje"];
+        const responsablesRows = [];
+        
+        const responsables = Object.keys(actividadesPorResponsable);
+        const responsablesOrdenados = responsables.sort((a, b) => 
+            actividadesPorResponsable[b].length - actividadesPorResponsable[a].length
+        ).slice(0, 5);
+        
+        responsablesOrdenados.forEach(responsable => {
+            const cantidad = actividadesPorResponsable[responsable].length;
+            const porcentaje = ((cantidad / actividades.length) * 100).toFixed(2) + '%';
+            responsablesRows.push([responsable, cantidad.toString(), porcentaje]);
+        });
+        
+        doc.autoTable({
+            head: [responsablesColumn],
+            body: responsablesRows,
+            startY: finalY2 + 20,
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [200, 35, 51] }
+        });
+    }
+    
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Manejar envío del formulario
+        document.getElementById('reporte-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const filtros = {
+                tipo: document.getElementById('reporte-tipo').value,
+                semestre: document.getElementById('reporte-semestre').value,
+                responsable: document.getElementById('reporte-responsable').value,
+                fechaDesde: document.getElementById('reporte-fecha-desde').value,
+                fechaHasta: document.getElementById('reporte-fecha-hasta').value
+            };
+            
+            cargarActividades(filtros);
+        });
+        
+        // Cambiar tipo de reporte
+        document.getElementById('reporte-tipo-reporte').addEventListener('change', function() {
+            if (actividades.length > 0) {
+                const tipoReporte = this.value;
+                const previewContainer = document.getElementById('reporte-preview');
+                
+                if (tipoReporte === 'detallado') {
+                    generarVistaPreviewDetallado(previewContainer);
+                } else if (tipoReporte === 'resumido') {
+                    generarVistaPreviewResumido(previewContainer);
+                } else if (tipoReporte === 'estadistico') {
+                    generarVistaPreviewEstadistico(previewContainer);
+                }
+            }
+        });
+    });
+</script>
+
+<%- include('partials/footer') %>

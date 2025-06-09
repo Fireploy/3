@@ -1,0 +1,169 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5 pt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Mi Perfil</h3>
+                        </div>
+                        <div class="col-auto">
+                            <a href="/dashboard" class="btn btn-light btn-sm">
+                                Volver al Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar-circle mx-auto mb-3">
+                            <span class="avatar-initials">
+                                <%= data.name ? data.name.charAt(0).toUpperCase() : data.email.charAt(0).toUpperCase() %>
+                            </span>
+                        </div>
+                        <h4><%= data.email %></h4>
+                        <span class="badge <%= data.role === 'admin' ? 'bg-danger' : (data.role === 'docente' ? 'bg-primary' : 'bg-success') %>">
+                            <%= data.role === 'admin' ? 'Admin' : (data.role === 'docente' ? 'Docente' : 'Usuario') %>
+                        </span>
+                    </div>
+
+                    <form id="profile-form">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre Completo</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="name" 
+                                name="name" 
+                                value="<%= data.name || '' %>" 
+                                placeholder="Ingrese su nombre completo"
+                            >
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input 
+                                type="email" 
+                                class="form-control" 
+                                id="email" 
+                                name="email" 
+                                value="<%= data.email %>" 
+                                readonly
+                            >
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Rol</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="role" 
+                                value="<%= data.role === 'admin' ? 'Administrador' : (data.role === 'docente' ? 'Docente' : 'Usuario') %>" 
+                                readonly
+                            >
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Nueva Contraseña (dejar en blanco para mantener la actual)</label>
+                            <input 
+                                type="password" 
+                                class="form-control" 
+                                id="password" 
+                                name="password" 
+                                placeholder="Nueva contraseña"
+                            >
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirmar Nueva Contraseña</label>
+                            <input 
+                                type="password" 
+                                class="form-control" 
+                                id="confirmPassword" 
+                                name="confirmPassword" 
+                                placeholder="Confirmar nueva contraseña"
+                            >
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger">Actualizar Perfil</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-circle {
+        width: 100px;
+        height: 100px;
+        background-color: #c82333;
+        text-align: center;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+    }
+
+    .avatar-initials {
+        position: relative;
+        top: 25px;
+        font-size: 40px;
+        line-height: 50px;
+        color: #fff;
+        font-weight: bold;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileForm = document.getElementById('profile-form');
+        
+        profileForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Validar contraseñas si se proporcionaron
+            if (password && password !== confirmPassword) {
+                alert('Las contraseñas no coinciden');
+                return;
+            }
+            
+            // Preparar datos para actualizar
+            const userData = {
+                name: document.getElementById('name').value
+            };
+            
+            // Añadir contraseña solo si se proporcionó
+            if (password) {
+                userData.password = password;
+            }
+            
+            try {
+                const userId = '<%= data.userId %>';
+                const response = await fetch(`/api/users/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert('Perfil actualizado correctamente');
+                    // Recargar la página para mostrar los datos actualizados
+                    window.location.reload();
+                } else {
+                    alert(`Error: ${result.message || 'No se pudo actualizar el perfil'}`);
+                }
+            } catch (error) {
+                console.error('Error al actualizar perfil:', error);
+                alert('Error al conectar con el servidor');
+            }
+        });
+    });
+</script>
+
+<%- include('partials/footer') %>

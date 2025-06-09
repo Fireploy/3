@@ -1,0 +1,508 @@
+<%- include('partials/header', { title: 'Consultar Actividades - ACTISIS' }) %>
+
+<%- include('partials/navbar', { user: data, page: 'consultar_actividades' }) %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Consulta de Actividades</h4>
+                </div>
+                <div class="card-body">
+                    <form id="filtro-form" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="filtro-tipo" class="form-label">Tipo de Actividad</label>
+                            <select class="form-select" id="filtro-tipo">
+                                <option value="">Todos</option>
+                                <option value="Docencia">Docencia</option>
+                                <option value="Investigación">Investigación</option>
+                                <option value="Extensión">Extensión</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtro-semestre" class="form-label">Semestre</label>
+                            <select class="form-select" id="filtro-semestre">
+                                <option value="">Todos</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtro-fecha-desde" class="form-label">Fecha Desde</label>
+                            <input type="date" class="form-control" id="filtro-fecha-desde">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtro-fecha-hasta" class="form-label">Fecha Hasta</label>
+                            <input type="date" class="form-control" id="filtro-fecha-hasta">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="filtro-responsable" class="form-label">Responsable</label>
+                            <div class="position-relative">
+                                <input type="text" class="form-control" id="filtro-responsable" placeholder="Nombre del responsable" autocomplete="off">
+                                <div id="responsables-list" class="position-absolute w-100 bg-white shadow-sm rounded" style="z-index: 1000; max-height: 200px; overflow-y: auto; display: none;"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <button type="submit" class="btn btn-danger me-2">Filtrar</button>
+                            <button type="button" id="limpiar-filtros" class="btn btn-outline-secondary">Limpiar Filtros</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Resultados</h5>
+                        <button id="exportar-pdf" class="btn btn-sm btn-outline-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-pdf me-1" viewBox="0 0 16 16">
+                                <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
+                                <path d="M4.603 12.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.187-.012.395-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.065.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.6 11.6 0 0 0-1.997.406 11.3 11.3 0 0 1-1.021 1.51c-.29.35-.608.655-.926.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.093.031c.075-.001.203-.05.379-.217.589-.484.777-.927.779-.934.2.161.38.347.579.543.099.096.188.184.277.276.027.028.085.133.067.21-.011.048-.07.106-.183.157-.129.059-.448.175-.76.292l-.012.84q-.91.603-.903 1.853v.007q-.528.285-1.028.528l-.036.018q-.515.27-.997.675l-.048.04c-.12.098-.248.202-.335.34-.036.058-.075.138-.064.217.011.088.073.165.179.205.106.04.195.011.254-.071.023-.03.049-.075.066-.127a.4.4 0 0 0 .022-.13c.001-.042-.012-.178-.093-.283-.028-.037-.056-.108-.03-.148.024-.036.135-.065.19-.084l.05-.016q.36-.12.735-.245c.275-.091.542-.18.793-.267v.007a1.2 1.2 0 0 0 .076-.024q.43-.159.86-.403l.025-.013q.242-.135.5-.3l.056-.035q.368-.23.747-.515l.032-.025q.322-.248.62-.54l.045-.044q.334-.338.6-.724l.014-.022c.197-.32.33-.697.33-.697s.229.297.366.52l.036.06q.154.255.29.544l.017.036q.125.272.235.556l.033.087.035.092q.082.223.154.458l.025.085q.119.402.19.838l.014.083q.064.425.07.898v.042q.003.23-.012.457l-.01.105c-.01.149-.035.297-.053.445l-.01.075c-.023.163-.053.316-.084.469l-.016.09c-.033.159-.07.318-.112.475l-.031.121c-.023.09-.047.178-.073.266l-.031.097q-.099.339-.225.67l-.03.078q-.126.32-.281.635l-.038.078q-.155.31-.346.608l-.041.066q-.198.305-.433.6l-.045.058q-.235.293-.501.57l-.048.051q-.267.275-.564.532l-.05.044q-.295.254-.61.486l-.049.036q-.322.232-.664.435l-.045.027q-.336.197-.69.365l-.044.022q-.354.17-.723.3l-.036.013q-.361.125-.733.204l-.032.007q-.372.079-.748.107l-.034.003q-.367.027-.733.003l-.036-.002q-.366-.024-.728-.098l-.031-.007q-.361-.074-.714-.193l-.029-.01q-.356-.123-.697-.29l-.03-.014q-.346-.171-.676-.384l-.024-.016q-.324-.214-.628-.465l-.024-.021q-.304-.252-.585-.537l-.017-.018q-.282-.285-.54-.595l-.018-.022q-.255-.31-.486-.645l-.014-.021q-.234-.339-.44-.695l-.01-.019q-.205-.356-.38-.728l-.008-.018q-.177-.375-.323-.76l-.007-.022c-.088-.232-.168-.465-.235-.698l-.007-.027q-.099-.343-.167-.691l-.006-.028q-.069-.35-.107-.702l-.003-.025q-.038-.352-.044-.704v-.022q-.007-.353.017-.704l.003-.026q.023-.35.078-.698l.005-.028q.055-.347.14-.69l.006-.024q.085-.343.2-.68l.01-.03q.114-.336.258-.665l.01-.022q.144-.33.317-.651l.014-.026q.172-.32.372-.626l.013-.02q.2-.307.428-.596l.015-.02q.228-.29.482-.56l.014-.016q.254-.27.532-.518l.02-.018q.279-.248.58-.47l.022-.016q.302-.222.624-.416l.022-.014q.32-.193.66-.357l.024-.01q.34-.164.696-.296l.027-.01q.356-.132.726-.23l.028-.006q.37-.098.75-.16l.032-.004q.38-.062.77-.086h.032q.39-.024.78-.008h.03q.39.016.776.07l.028.006q.387.054.766.148"/>
+                            </svg>
+                            Exportar a PDF
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Lugar</th>
+                                    <th>Responsable</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="actividades-tabla">
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        <div class="spinner-border text-danger" role="status">
+                                            <span class="visually-hidden">Cargando...</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ver detalles -->
+<div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="detalleModalLabel">Detalles de la Actividad</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detalle-actividad-contenido">
+                <div class="text-center">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" id="descargar-pdf-detalle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-pdf me-1" viewBox="0 0 16 16">
+                        <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1"/>
+                        <path d="M4.603 12.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.187-.012.395-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.065.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.6 11.6 0 0 0-1.997.406 11.3 11.3 0 0 1-1.021 1.51c-.29.35-.608.655-.926.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.093.031c.075-.001.203-.05.379-.217.589-.484.777-.927.779-.934.2.161.38.347.579.543.099.096.188.184.277.276.027.028.085.133.067.21-.011.048-.07.106-.183.157-.129.059-.448.175-.76.292l-.012.84q-.91.603-.903 1.853v.007q-.528.285-1.028.528l-.036.018q-.515.27-.997.675l-.048.04c-.12.098-.248.202-.335.34-.036.058-.075.138-.064.217.011.088.073.165.179.205.106.04.195.011.254-.071.023-.03.049-.075.066-.127a.4.4 0 0 0 .022-.13c.001-.042-.012-.178-.093-.283-.028-.037-.056-.108-.03-.148.024-.036.135-.065.19-.084l.05-.016q.36-.12.735-.245c.275-.091.542-.18.793-.267v.007a1.2 1.2 0 0 0 .076-.024q.43-.159.86-.403l.025-.013q.242-.135.5-.3l.056-.035q.368-.23.747-.515l.032-.025q.322-.248.62-.54l.045-.044q.334-.338.6-.724l.014-.022c.197-.32.33-.697.33-.697s.229.297.366.52l.036.06q.154.255.29.544l.017.036q.125.272.235.556l.033.087.035.092q.082.223.154.458l.025.085q.119.402.19.838l.014.083q.064.425.07.898v.042q.003.23-.012.457l-.01.105c-.01.149-.035.297-.053.445l-.01.075c-.023.163-.053.316-.084.469l-.016.09c-.033.159-.07.318-.112.475l-.031.121c-.023.09-.047.178-.073.266l-.031.097q-.099.339-.225.67l-.03.078q-.126.32-.281.635l-.038.078q-.155.31-.346.608l-.041.066q-.198.305-.433.6l-.045.058q-.235.293-.501.57l-.048.051q-.267.275-.564.532l-.05.044q-.295.254-.61.486l-.049.036q-.322.232-.664.435l-.045.027q-.336.197-.69.365l-.044.022q-.354.17-.723.3l-.036.013q-.361.125-.733.204l-.032.007q-.372.079-.748.107l-.034.003q-.367.027-.733.003l-.036-.002q-.366-.024-.728-.098l-.031-.007q-.361-.074-.714-.193l-.029-.01q-.356-.123-.697-.29l-.03-.014q-.346-.171-.676-.384l-.024-.016q-.324-.214-.628-.465l-.024-.021q-.304-.252-.585-.537l-.017-.018q-.282-.285-.54-.595l-.018-.022q-.255-.31-.486-.645l-.014-.021q-.234-.339-.44-.695l-.01-.019q-.205-.356-.38-.728l-.008-.018q-.177-.375-.323-.76l-.007-.022c-.088-.232-.168-.465-.235-.698l-.007-.027q-.099-.343-.167-.691l-.006-.028q-.069-.35-.107-.702l-.003-.025q-.038-.352-.044-.704v-.022q-.007-.353.017-.704l.003-.026q.023-.35.078-.698l.005-.028q.055-.347.14-.69l.006-.024q.085-.343.2-.68l.01-.03q.114-.336.258-.665l.01-.022q.144-.33.317-.651l.014-.026q.172-.32.372-.626l.013-.02q.2-.307.428-.596l.015-.02q.228-.29.482-.56l.014-.016q.254-.27.532-.518l.02-.018q.279-.248.58-.47l.022-.016q.302-.222.624-.416l.022-.014q.32-.193.66-.357l.024-.01q.34-.164.696-.296l.027-.01q.356-.132.726-.23l.028-.006q.37-.098.75-.16l.032-.004q.38-.062.77-.086h.032q.39-.024.78-.008h.03q.39.016.776.07l.028.006q.387.054.766.148"/>
+                    </svg>
+                    Descargar PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Incluir jsPDF para generar PDFs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+    // Variables globales
+    let actividades = [];
+    let actividadSeleccionada = null;
+    let listaResponsables = []; // Lista para autocompletado de responsables
+    let detalleModal; // Declarar aquí, inicializar en DOMContentLoaded
+    
+    // Función para formatear fechas
+    function formatearFecha(fechaStr) {
+        const fecha = new Date(fechaStr);
+        return fecha.toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    }
+    
+    // Cargar lista de responsables para autocompletado
+    function cargarListaResponsables() {
+        fetch('/api/users/available')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(usuarios => {
+                // Guardar nombres de usuarios para autocompletado
+                listaResponsables = usuarios.map(u => u.name);
+                console.log('Lista de responsables cargada:', listaResponsables);
+            })
+            .catch(err => {
+                console.error('Error al cargar responsables:', err);
+            });
+    }
+    
+    // Función para autocompletado de responsables
+    function initAutocompletado() {
+        const inputResponsable = document.getElementById('filtro-responsable');
+        const listaDiv = document.getElementById('responsables-list');
+        
+        inputResponsable.addEventListener('input', function() {
+            const valor = this.value.toLowerCase();
+            if (valor.length < 2) {
+                listaDiv.style.display = 'none';
+                return;
+            }
+            
+            // Filtrar responsables que coincidan con lo que se está escribiendo
+            const coincidencias = listaResponsables.filter(resp => 
+                resp.toLowerCase().includes(valor)
+            );
+            
+            if (coincidencias.length > 0) {
+                listaDiv.innerHTML = '';
+                coincidencias.forEach(nombre => {
+                    const item = document.createElement('div');
+                    item.className = 'p-2 border-bottom';
+                    item.style.cursor = 'pointer';
+                    item.textContent = nombre;
+                    
+                    item.addEventListener('click', function() {
+                        inputResponsable.value = nombre;
+                        listaDiv.style.display = 'none';
+                    });
+                    
+                    listaDiv.appendChild(item);
+                });
+                listaDiv.style.display = 'block';
+            } else {
+                listaDiv.style.display = 'none';
+            }
+        });
+        
+        // Ocultar la lista cuando se hace clic fuera
+        document.addEventListener('click', function(e) {
+            if (e.target !== inputResponsable && e.target !== listaDiv) {
+                listaDiv.style.display = 'none';
+            }
+        });
+    }
+    
+    // Función para cargar actividades con filtros
+    function cargarActividades(filtros = {}) {
+        const tablaBody = document.getElementById('actividades-tabla');
+        
+        // Mostrar spinner de carga
+        tablaBody.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+        
+        // URL base para consulta
+        let url = '/api/actividades';
+        
+        // Añadir filtros como query params si existen
+        if (Object.values(filtros).some(v => v)) {
+            const params = new URLSearchParams();
+            
+            if (filtros.tipo) params.append('tipo', filtros.tipo);
+            if (filtros.semestre) params.append('semestre', filtros.semestre);
+            if (filtros.responsable) params.append('responsable', filtros.responsable);
+            if (filtros.fechaDesde) params.append('fechaDesde', filtros.fechaDesde);
+            if (filtros.fechaHasta) params.append('fechaHasta', filtros.fechaHasta);
+            
+            url += `?${params.toString()}`;
+        }
+        
+        console.log('Consultando actividades con URL:', url);
+        
+        fetch(url)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Error en la respuesta del servidor: ' + res.status);
+                }
+                return res.json();
+            })
+            .then(data => {
+                console.log('Actividades recibidas:', data.length);
+                actividades = data;
+                tablaBody.innerHTML = '';
+                
+                if (actividades.length === 0) {
+                    tablaBody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center">No se encontraron actividades con los filtros seleccionados.</td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                actividades.forEach(actividad => {
+                    const fechaInicio = formatearFecha(actividad.fechaInicio);
+                    const fechaFin = formatearFecha(actividad.fechaFin);
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${actividad.nombre}</td>
+                        <td>${actividad.tipo}</td>
+                        <td>${fechaInicio}</td>
+                        <td>${fechaFin}</td>
+                        <td>${actividad.lugar}</td>
+                        <td>${actividad.responsable}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info ver-detalle" data-id="${actividad._id}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                                </svg>
+                            </button>
+                        </td>
+                    `;
+                    tablaBody.appendChild(tr);
+                });
+                
+                // Agregar event listeners a los botones de detalle
+                document.querySelectorAll('.ver-detalle').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.getAttribute('data-id');
+                        mostrarDetalle(id);
+                    });
+                });
+            })
+            .catch(err => {
+                console.error('Error al cargar actividades:', err);
+                tablaBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-danger">
+                            Error al cargar actividades: ${err.message}. Por favor, intente de nuevo más tarde.
+                        </td>
+                    </tr>
+                `;
+            });
+    }
+    
+    // Función para mostrar detalle de actividad
+    function mostrarDetalle(id) {
+        const contenido = document.getElementById('detalle-actividad-contenido');
+        contenido.innerHTML = `
+            <div class="text-center">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        `;
+        
+        detalleModal.show();
+        
+        fetch(`/api/actividades/${id}`)
+            .then(res => res.json())
+            .then(actividad => {
+                actividadSeleccionada = actividad;
+                
+                const fechaInicio = formatearFecha(actividad.fechaInicio);
+                const fechaFin = formatearFecha(actividad.fechaFin);
+                
+                contenido.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>${actividad.nombre}</h4>
+                            <p class="badge bg-${actividad.tipo === 'Docencia' ? 'primary' : actividad.tipo === 'Investigación' ? 'success' : 'warning'}">${actividad.tipo}</p>
+                            <p><strong>Fechas:</strong> ${fechaInicio} - ${fechaFin}</p>
+                            <p><strong>Lugar:</strong> ${actividad.lugar}</p>
+                            <p><strong>Responsable:</strong> ${actividad.responsable}</p>
+                            <p><strong>Semestre:</strong> ${actividad.semestre}</p>
+                            <p><strong>Movilidad:</strong> ${actividad.movilidad || 'No aplica'}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Descripción:</strong></p>
+                            <p>${actividad.descripcion || 'No hay descripción disponible.'}</p>
+                            <p><strong>Temática:</strong> ${actividad.tematica || 'No especificada'}</p>
+                            ${actividad.evidenciaUrl ? `<p><strong>Evidencia:</strong> <a href="${actividad.evidenciaUrl}" target="_blank">Ver evidencia</a></p>` : ''}
+                            <p><strong>Creado por:</strong> ${actividad.creadoPor?.name || 'Usuario del sistema'}</p>
+                        </div>
+                    </div>
+                `;
+            })
+            .catch(err => {
+                console.error('Error al cargar detalle de actividad:', err);
+                contenido.innerHTML = `
+                    <div class="alert alert-danger">
+                        Error al cargar los detalles de la actividad. Intente nuevamente.
+                    </div>
+                `;
+            });
+    }
+    
+    // Función para generar PDF de una actividad
+    function generarPDFDetalle(actividad) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Título
+        doc.setFontSize(18);
+        doc.setTextColor(200, 35, 51); // Color rojo UFPS
+        doc.text('Detalle de Actividad - ACTISIS', 105, 20, { align: 'center' });
+        
+        // Información de la actividad
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text(actividad.nombre, 105, 30, { align: 'center' });
+        
+        doc.setFontSize(12);
+        doc.text(`Tipo: ${actividad.tipo}`, 20, 45);
+        doc.text(`Fechas: ${formatearFecha(actividad.fechaInicio)} - ${formatearFecha(actividad.fechaFin)}`, 20, 55);
+        doc.text(`Lugar: ${actividad.lugar}`, 20, 65);
+        doc.text(`Responsable: ${actividad.responsable}`, 20, 75);
+        doc.text(`Semestre: ${actividad.semestre}`, 20, 85);
+        doc.text(`Movilidad: ${actividad.movilidad || 'No aplica'}`, 20, 95);
+        
+        // Descripción
+        doc.text('Descripción:', 20, 110);
+        const descripcionLines = doc.splitTextToSize(actividad.descripcion || 'No hay descripción disponible.', 170);
+        doc.text(descripcionLines, 20, 120);
+        
+        // Pie de página
+        doc.setFontSize(10);
+        doc.text('Universidad Francisco de Paula Santander - Programa de Ingeniería de Sistemas', 105, 280, { align: 'center' });
+        doc.text(`Generado el: ${new Date().toLocaleDateString('es-ES')}`, 105, 285, { align: 'center' });
+        
+        // Guardar PDF
+        doc.save(`Actividad_${actividad.nombre.replace(/\s+/g, '_')}.pdf`);
+    }
+    
+    // Función para generar PDF de todas las actividades filtradas
+    function generarPDFLista(actividades) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Título
+        doc.setFontSize(18);
+        doc.setTextColor(200, 35, 51); // Color rojo UFPS
+        doc.text('Listado de Actividades - ACTISIS', 105, 20, { align: 'center' });
+        
+        // Fecha de generación
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Fecha de generación: ${new Date().toLocaleDateString('es-ES')}`, 20, 30);
+        
+        // Tabla de actividades
+        const tableColumn = ["Nombre", "Tipo", "Fecha Inicio", "Fecha Fin", "Lugar", "Responsable"];
+        const tableRows = [];
+        
+        actividades.forEach(actividad => {
+            const fechaInicio = formatearFecha(actividad.fechaInicio);
+            const fechaFin = formatearFecha(actividad.fechaFin);
+            
+            const actividadData = [
+                actividad.nombre,
+                actividad.tipo,
+                fechaInicio,
+                fechaFin,
+                actividad.lugar,
+                actividad.responsable
+            ];
+            tableRows.push(actividadData);
+        });
+        
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 40,
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [200, 35, 51] }
+        });
+        
+        // Pie de página
+        const finalY = doc.lastAutoTable.finalY || 280;
+        doc.setFontSize(10);
+        doc.text('Universidad Francisco de Paula Santander - Programa de Ingeniería de Sistemas', 105, finalY + 10, { align: 'center' });
+        
+        // Guardar PDF
+        doc.save('Listado_Actividades_ACTISIS.pdf');
+    }
+    
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        detalleModal = new bootstrap.Modal(document.getElementById('detalleModal')); // Inicializar aquí
+        
+        // Cargar lista de responsables para autocompletado
+        cargarListaResponsables();
+        
+        // Inicializar autocompletado
+        initAutocompletado();
+        
+        // Cargar actividades al iniciar
+        cargarActividades();
+        
+        // Filtrar actividades
+        document.getElementById('filtro-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const filtros = {
+                tipo: document.getElementById('filtro-tipo').value,
+                semestre: document.getElementById('filtro-semestre').value,
+                responsable: document.getElementById('filtro-responsable').value,
+                fechaDesde: document.getElementById('filtro-fecha-desde').value,
+                fechaHasta: document.getElementById('filtro-fecha-hasta').value
+            };
+            
+            cargarActividades(filtros);
+        });
+        
+        // Limpiar filtros
+        document.getElementById('limpiar-filtros').addEventListener('click', function() {
+            document.getElementById('filtro-tipo').value = '';
+            document.getElementById('filtro-semestre').value = '';
+            document.getElementById('filtro-responsable').value = '';
+            document.getElementById('filtro-fecha-desde').value = '';
+            document.getElementById('filtro-fecha-hasta').value = '';
+            
+            cargarActividades();
+        });
+        
+        // Exportar a PDF (lista completa)
+        document.getElementById('exportar-pdf').addEventListener('click', function() {
+            if (actividades.length > 0) {
+                generarPDFLista(actividades);
+            } else {
+                alert('No hay actividades para exportar.');
+            }
+        });
+        
+        // Descargar PDF de detalle
+        document.getElementById('descargar-pdf-detalle').addEventListener('click', function() {
+            if (actividadSeleccionada) {
+                generarPDFDetalle(actividadSeleccionada);
+            }
+        });
+    });
+</script>
+
+<%- include('partials/footer') %>

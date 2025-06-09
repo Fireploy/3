@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - ACTISIS</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form-container">
+            <div class="back-link">
+                <a href="/" class="btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                    </svg>
+                    Volver al Inicio
+                </a>
+            </div>
+            <form id="login-form">
+                <h2>Iniciar Sesión</h2>
+
+                <div id="login-message" class="message">
+                    <% if (typeof message !== 'undefined' && message) { %>
+                        <p class="<%= message.type %>"><%= message.text %></p>
+                    <% } %>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+
+                <button type="submit">Ingresar</button>
+
+                <p class="switch-form">
+                    ¿No tienes cuenta? <a href="/register">Regístrate aquí</a>
+                </p>
+                </form>
+        </div>
+    </div>
+
+    <script>
+        const $ = el => document.querySelector(el);
+        const loginForm = $('#login-form');
+        const loginMessage = $('#login-message');
+
+        loginForm?.addEventListener('submit', e => {
+            e.preventDefault();
+            const email = $('#login-email').value;
+            const password = $('#login-password').value;
+
+            // Limpiar mensajes anteriores
+            loginMessage.innerHTML = '';
+            loginMessage.className = 'message'; // Reset class
+
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+            .then(res => res.json().then(data => ({ ok: res.ok, status: res.status, data })))
+            .then(({ ok, data }) => {
+                if (ok) {
+                    loginMessage.innerHTML = '<p class="success">¡Inicio de sesión exitoso! Redirigiendo...</p>';
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1500); // Redirige después de 1.5 segundos
+                } else {
+                    loginMessage.innerHTML = `<p class="error">${data.message || 'Error al iniciar sesión. Verifica tus credenciales.'}</p>`;
+                }
+            })
+            .catch(err => {
+                console.error('Fetch Error:', err);
+                loginMessage.innerHTML = '<p class="error">Error de conexión. Intenta más tarde.</p>';
+            });
+        });
+    </script>
+</body>
+</html>
